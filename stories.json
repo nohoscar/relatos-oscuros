@@ -103,17 +103,20 @@
       {
         "voice": "narrador",
         "text": "Todo empezó en el bosque. Vine a esta cabaña aislada para programar en paz, lejos de la ciudad. Pero el primer día, mientras fumaba en el porche al atardecer, lo vi. Una figura imposiblemente alta y delgada, un borrón negro sin rostro recortado contra los pinos y la niebla densa. No se movía, pero sentía su atención clavada en mí como un punzón de hielo. Entré despacio, cerré con llave y traté de convencerme de que era una ilusión óptica provocada por el cansancio y la mala luz. Pasé la noche bebiendo whisky, mirando de reojo las cortinas cerradas, jurándome que al amanecer todo tendría sentido.",
-        "image": "images/infeccion-1.png"
+        "image": "images/infeccion-1.png",
+        "audioFile": "audio/infeccion-1.mp3"
       },
       {
         "voice": "narrador",
         "text": "Intenté ignorar el miedo y concentrarme en el trabajo. Estaba terminando un script para el proyecto de desktop pet que llamaba Kiro pet. Tenía que ser una pequeña esfera de píxeles rebotando inofensivamente en la terminal. Pero Kiro cambió. Dejó de rebotar y se quedó quieto en el centro del monitor CRT, sus píxeles formando dos ojos fijos y blancos. No pude cerrar el proceso. Y entonces, el reflejo en la pantalla negra me mostró algo. No veía mi habitación, ni mi estantería. Veía un pasillo interminable, oscuro. Y en ese pasillo, el contorno alto y delgado de Slenderman empezaba a asomarse. La misma figura del bosque. Ahora me acechaba desde dentro del sistema.",
-        "image": "images/infeccion-2.png"
+        "image": "images/infeccion-2.png",
+        "audioFile": "audio/infeccion-2.mp3"
       },
       {
         "voice": "narrador",
         "text": "La tecnología había sido invadida. No servía de nada desconectar internet ni desenchufar la torre. Kiro seguía ahí, y el reflejo se volvía más nítido. La criatura estaba cada vez más cerca en el pasillo digital. Salí corriendo de la habitación, pero cuando volví, la corrupción analógica había saltado del monitor. El escritorio, los papeles, la taza de café, todo estaba cubierto por un moho digital negro y pixelado. Era como si el código corrupto de Kiro se hubiera materializado. Y ahora, un zumbido estático empezó a sonar en mis oídos. Provenía del pasillo de la cabaña. El pasillo real. La figura ya no estaba en el reflejo. Se había teletransportado aquí. Podía oír sus pasos pesados y descompasados, desafiando cualquier anatomía lógica. Ya no había refugio, ni en el bosque ni en mi propio código.",
-        "image": "images/infeccion-3.png"
+        "image": "images/infeccion-3.png",
+        "audioFile": "audio/infeccion-3.mp3"
       }
     ]
   }
