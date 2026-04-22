@@ -1,0 +1,120 @@
+[
+  {
+    "id": 1,
+    "title": "La Casa al Final del Camino",
+    "author": "Kiro",
+    "fragments": [
+      { "voice": "narrador", "text": "Era una noche fría de noviembre. El viento aullaba entre los árboles secos mientras tres amigos caminaban por un sendero olvidado." },
+      { "voice": "hombre", "text": "No deberíamos estar aquí. Mi abuelo siempre decía que este camino lleva a un lugar del que nadie regresa igual." },
+      { "voice": "mujer", "text": "No seas ridículo, Carlos. Es solo una casa abandonada. Además, ya casi llegamos." },
+      { "voice": "narrador", "text": "La casa apareció entre la niebla como una sombra gigante. Las ventanas rotas parecían ojos vacíos observándolos. La puerta principal estaba entreabierta, como invitándolos a entrar." },
+      { "voice": "anciano", "text": "Vaya, vaya... visitantes. Hacía tanto tiempo que nadie venía. Pasen, pasen... la casa los ha estado esperando." },
+      { "voice": "mujer", "text": "¿Quién eres tú? ¿Qué haces aquí solo en la oscuridad?" },
+      { "voice": "anciano", "text": "¿Solo? Oh no, querida. Yo no estoy solo. Nunca estamos solos en esta casa. Ellos siempre están aquí... escuchando... esperando." },
+      { "voice": "narrador", "text": "Un crujido recorrió el techo. Luego otro. Y otro más. Como si docenas de pies descalzos caminaran sobre sus cabezas. La puerta detrás de ellos se cerró de golpe. Y entonces, todas las luces se apagaron." },
+      { "voice": "nina", "text": "¿Quieren jugar conmigo? Hace mucho que no tengo amigos. Los últimos... se quedaron para siempre." },
+      { "voice": "narrador", "text": "La voz venía de todas partes y de ninguna. Carlos sintió una mano helada tomar la suya en la oscuridad. Una mano pequeña. Una mano que no pertenecía a ninguno de sus amigos." }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "El Último Turno",
+    "author": "Kiro",
+    "fragments": [
+      { "voice": "narrador", "text": "El Hospital San Judas llevaba cerrado quince años. Pero esa noche, la enfermera Lucía tenía que entrar a recuperar los expedientes del sótano. Su jefe le dijo que sería rápido. Le mintió." },
+      { "voice": "mujer", "text": "Hola, soy Lucía. Vengo por los archivos del ala sur. ¿Hay alguien del personal de seguridad aquí?" },
+      { "voice": "narrador", "text": "Su voz rebotó por los pasillos vacíos. El eco le devolvió algo que no era su voz. Era un susurro. Decía su nombre." },
+      { "voice": "mujer", "text": "Esto es ridículo. Son solo tuberías viejas. Voy a bajar, tomo los expedientes y me largo." },
+      { "voice": "narrador", "text": "Las escaleras al sótano crujían con cada paso. El aire olía a formaldehído y a algo más. Algo dulce y podrido. Al llegar abajo, encontró los archiveros. Pero también encontró algo más." },
+      { "voice": "mujer", "text": "Dios mío... ¿qué es esto? Estas camillas no deberían estar aquí. Y estas sábanas... están manchadas. Están frescas." },
+      { "voice": "anciano", "text": "Enfermera... enfermera, por favor. Llevo tanto tiempo esperando. Nadie viene a revisarme. Me duele todo. ¿Por qué me dejaron aquí abajo?" },
+      { "voice": "mujer", "text": "Señor, este hospital está cerrado. No hay pacientes aquí. ¿Cómo entró? ¿Necesita ayuda?" },
+      { "voice": "anciano", "text": "¿Cerrado? No, no. Yo nunca me fui. Ninguno de nosotros se fue. Mire a su alrededor, enfermera. Mire bien." },
+      { "voice": "narrador", "text": "Lucía encendió la linterna del celular. Las camillas no eran cinco. Eran veinte. Treinta. Se extendían hasta donde la luz no alcanzaba. Y en cada una, bajo cada sábana, algo se movía lentamente. Algo que empezaba a sentarse." },
+      { "voice": "mujer", "text": "No, no, no... esto no es real." },
+      { "voice": "narrador", "text": "Su linterna parpadeó. Y en ese instante de oscuridad, escuchó treinta voces al unísono: Enfermera... ya es hora de nuestra medicina." }
+    ]
+  },
+
+  {
+    "id": 3,
+    "title": "La Llamada de las 3:33",
+    "author": "Kiro",
+    "fragments": [
+      { "voice": "narrador", "text": "Diego trabajaba como operador nocturno en una central telefónica. Llevaba tres años en el turno de medianoche. Nunca había pasado nada extraño. Hasta la noche del martes." },
+      { "voice": "narrador", "text": "A las tres y treinta y tres de la madrugada, una llamada entró por la línea siete. La línea siete llevaba desconectada desde mil novecientos noventa y ocho." },
+      { "voice": "hombre", "text": "Central de operaciones, buenas noches. ¿En qué puedo ayudarle?" },
+      { "voice": "nina", "text": "Hola. ¿Me puedes ayudar? Estoy perdida y está muy oscuro. No encuentro a mi mamá." },
+      { "voice": "hombre", "text": "Tranquila, pequeña. ¿Sabes dónde estás? ¿Puedes decirme tu nombre?" },
+      { "voice": "nina", "text": "Me llamo Valentina. Estoy en un lugar frío. Hay tierra por todos lados. Huele feo. No puedo moverme mucho." },
+      { "voice": "hombre", "text": "¿Estás en un sótano? ¿En una cueva? Voy a mandar ayuda, Valentina." },
+      { "voice": "nina", "text": "No es un sótano. Es más pequeño. Es como una caja. Una caja de madera. Y está cerrada." },
+      { "voice": "narrador", "text": "Un escalofrío recorrió la espalda de Diego. Buscó el nombre en el sistema. Valentina Reyes, desaparecida en mil novecientos noventa y siete. Encontrada tres meses después. El caso estaba cerrado." },
+      { "voice": "hombre", "text": "Valentina... ¿cuánto tiempo llevas ahí?" },
+      { "voice": "nina", "text": "No sé. Mucho. Tengo mucho frío. Pero ya no estoy sola. Hay alguien más aquí ahora. Está justo detrás de ti, Diego." },
+      { "voice": "narrador", "text": "La llamada se cortó. Diego sintió un aliento helado en su nuca. Lentamente, muy lentamente, giró su silla. La oficina estaba vacía. Pero en el vidrio de la ventana, detrás de su reflejo, había una niña. Sonreía. Y la línea siete empezó a sonar de nuevo." }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "El Espejo del Ropero",
+    "author": "Kiro",
+    "fragments": [
+      { "voice": "narrador", "text": "Cuando la familia Mendoza se mudó a la casa vieja de la abuela, encontraron un ropero antiguo en el cuarto del fondo. Tenía un espejo enorme en la puerta. Un espejo que no reflejaba bien." },
+      { "voice": "mujer", "text": "Amor, mira este ropero. Es hermoso, debe tener como cien años. Pero el espejo está raro, como empañado por dentro." },
+      { "voice": "hombre", "text": "Déjalo ahí. Mi abuela nunca quiso que tocáramos ese ropero. Decía que el espejo no era un espejo." },
+      { "voice": "mujer", "text": "¿Y qué era entonces?" },
+      { "voice": "hombre", "text": "Una ventana." },
+      { "voice": "narrador", "text": "Esa noche, Sofía se despertó a las dos de la mañana. La habitación estaba helada. El espejo del ropero brillaba con una luz tenue que no venía de ninguna parte." },
+      { "voice": "mujer", "text": "¿Qué demonios...? Marcos, despierta. El espejo está... Marcos, el espejo está mostrando algo." },
+      { "voice": "narrador", "text": "En el espejo no estaba su reflejo. Era la misma habitación, pero diferente. Las paredes estaban manchadas de algo oscuro. Y en la cama del reflejo, había alguien durmiendo. Alguien que se parecía exactamente a ella." },
+      { "voice": "mujer", "text": "Marcos, por favor despierta. Hay alguien en el espejo. Se ve igual que yo pero... está sonriendo. Yo no estoy sonriendo." },
+      { "voice": "narrador", "text": "La figura en el espejo abrió los ojos. Ojos completamente negros. Se sentó en la cama lentamente. Y levantó la mano. No para saludar. Para señalar. Señalaba algo detrás de Sofía." },
+      { "voice": "hombre", "text": "Sofía... ¿por qué estás parada frente al ropero? Llevas ahí tres horas. Sofía, son las cinco de la mañana. ¿Sofía? ¿Por qué estás sonriendo así?" },
+      { "voice": "narrador", "text": "Sofía giró lentamente hacia Marcos. Sus ojos ya no eran los mismos. Eran completamente negros. Y en el espejo, la verdadera Sofía golpeaba el cristal desde el otro lado, gritando sin que nadie pudiera escucharla." }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "No Abras los Ojos",
+    "author": "Kiro",
+    "fragments": [
+      { "voice": "narrador", "text": "El doctor Paredes era un psiquiatra reconocido. Llevaba veinte años tratando pacientes. Pero la paciente de la habitación nueve era diferente a todo lo que había visto." },
+      { "voice": "hombre", "text": "Buenos días, Ana. Soy el doctor Paredes. Me dijeron que llevas tres días sin abrir los ojos. ¿Puedes decirme por qué?" },
+      { "voice": "mujer", "text": "Porque si los abro, ellos saben que los puedo ver. Y si saben que los puedo ver... vienen por ti." },
+      { "voice": "hombre", "text": "¿Ellos? ¿Quiénes son ellos, Ana?" },
+      { "voice": "mujer", "text": "Los que están en los rincones. Los que se pegan al techo. Los que caminan detrás de la gente. Hay uno detrás de usted ahora mismo, doctor. Es alto. No tiene cara. Pero tiene muchas, muchas manos." },
+      { "voice": "hombre", "text": "Ana, no hay nadie detrás de mí. Estamos solos en esta habitación." },
+      { "voice": "mujer", "text": "Eso es lo que usted cree porque no puede verlos. Yo antes tampoco podía. Hasta que tomé esas pastillas que encontré en la casa vieja. Ahora los veo siempre. Incluso con los ojos cerrados los siento." },
+      { "voice": "narrador", "text": "El doctor Paredes revisó el expediente. Las pastillas que Ana describía no coincidían con ningún medicamento conocido. Eran cápsulas negras, sin etiqueta, encontradas en el sótano de una casa abandonada." },
+      { "voice": "hombre", "text": "Ana, voy a ayudarte. Pero necesito que abras los ojos para poder examinarte." },
+      { "voice": "mujer", "text": "No. No lo entiende. Si abro los ojos, el que está detrás de usted va a saber que yo lo delaté. Y entonces no va a venir por mí. Va a ir por usted. Por su familia. Por todos los que usted quiere. Por favor, doctor. No me haga abrirlos." },
+      { "voice": "narrador", "text": "El doctor sintió un escalofrío. La temperatura de la habitación bajó de golpe. Las luces parpadearon. Y entonces, Ana abrió los ojos. Sus pupilas estaban dilatadas al máximo, completamente negras. Miraba fijamente por encima del hombro del doctor." },
+      { "voice": "mujer", "text": "Ya es tarde. Ya te vio. Lo siento mucho, doctor. Lo siento mucho." },
+      { "voice": "narrador", "text": "Esa noche, el doctor Paredes llegó a su casa. Se miró en el espejo del baño. Todo parecía normal. Pero justo antes de apagar la luz, lo vio. En el rincón del techo. Algo largo, oscuro, sin cara. Con muchas, muchas manos. Y lo estaba mirando." }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "La Infección Analógica",
+    "author": "Relato Fusionado",
+    "cover": "images/infeccion-cover.png",
+    "fragments": [
+      {
+        "voice": "narrador",
+        "text": "Todo empezó en el bosque. Vine a esta cabaña aislada para programar en paz, lejos de la ciudad. Pero el primer día, mientras fumaba en el porche al atardecer, lo vi. Una figura imposiblemente alta y delgada, un borrón negro sin rostro recortado contra los pinos y la niebla densa. No se movía, pero sentía su atención clavada en mí como un punzón de hielo. Entré despacio, cerré con llave y traté de convencerme de que era una ilusión óptica provocada por el cansancio y la mala luz. Pasé la noche bebiendo whisky, mirando de reojo las cortinas cerradas, jurándome que al amanecer todo tendría sentido.",
+        "image": "images/infeccion-1.png"
+      },
+      {
+        "voice": "narrador",
+        "text": "Intenté ignorar el miedo y concentrarme en el trabajo. Estaba terminando un script para el proyecto de desktop pet que llamaba Kiro pet. Tenía que ser una pequeña esfera de píxeles rebotando inofensivamente en la terminal. Pero Kiro cambió. Dejó de rebotar y se quedó quieto en el centro del monitor CRT, sus píxeles formando dos ojos fijos y blancos. No pude cerrar el proceso. Y entonces, el reflejo en la pantalla negra me mostró algo. No veía mi habitación, ni mi estantería. Veía un pasillo interminable, oscuro. Y en ese pasillo, el contorno alto y delgado de Slenderman empezaba a asomarse. La misma figura del bosque. Ahora me acechaba desde dentro del sistema.",
+        "image": "images/infeccion-2.png"
+      },
+      {
+        "voice": "narrador",
+        "text": "La tecnología había sido invadida. No servía de nada desconectar internet ni desenchufar la torre. Kiro seguía ahí, y el reflejo se volvía más nítido. La criatura estaba cada vez más cerca en el pasillo digital. Salí corriendo de la habitación, pero cuando volví, la corrupción analógica había saltado del monitor. El escritorio, los papeles, la taza de café, todo estaba cubierto por un moho digital negro y pixelado. Era como si el código corrupto de Kiro se hubiera materializado. Y ahora, un zumbido estático empezó a sonar en mis oídos. Provenía del pasillo de la cabaña. El pasillo real. La figura ya no estaba en el reflejo. Se había teletransportado aquí. Podía oír sus pasos pesados y descompasados, desafiando cualquier anatomía lógica. Ya no había refugio, ni en el bosque ni en mi propio código.",
+        "image": "images/infeccion-3.png"
+      }
+    ]
+  }
+]
