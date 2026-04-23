@@ -19,7 +19,33 @@ let currentFragmentIndex = 0;
 let audioQueue = [];
 let isPlaying = false;
 let currentAudio = null;
+let ambientAudio = null;
 const isMobile = () => window.innerWidth <= 768;
+
+// ============================================
+// Ambient audio
+// ============================================
+function startAmbient() {
+  if (ambientAudio) return;
+  ambientAudio = new Audio("audio/ambient-menu.mp3");
+  ambientAudio.loop = true;
+  ambientAudio.volume = 0.3;
+  ambientAudio.play().catch(() => {});
+}
+
+function stopAmbient() {
+  if (!ambientAudio) return;
+  ambientAudio.pause();
+  ambientAudio.currentTime = 0;
+  ambientAudio = null;
+}
+
+// Start ambient on first user interaction (browser requirement)
+function initAmbient() {
+  startAmbient();
+  document.removeEventListener("click", initAmbient);
+}
+document.addEventListener("click", initAmbient);
 
 // ============================================
 // Render sidebar story list
@@ -69,6 +95,8 @@ function openStory(id) {
     document.getElementById("sidebar").classList.add("hidden-mobile");
     reader.classList.add("active-mobile");
   }
+
+  stopAmbient();
 
   empty.classList.add("hidden");
   content.classList.remove("hidden");
@@ -130,6 +158,7 @@ function goBack() {
   document.getElementById("reader-content").classList.add("hidden");
   document.getElementById("reader-content").innerHTML = "";
   renderStories();
+  startAmbient();
 }
 
 // ============================================
