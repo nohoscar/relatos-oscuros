@@ -54,7 +54,8 @@
         "text": "La voz venía de todas partes y de ninguna. Carlos sintió una mano helada tomar la suya en la oscuridad. Una mano pequeña. Una mano que no pertenecía a ninguno de sus amigos.",
         "audioFile": "audio/story1-10.mp3"
       }
-    ]
+    ],
+    "ambient": "audio/ambient-story1.mp3"
   },
   {
     "id": 2,
@@ -121,7 +122,8 @@
         "text": "Su linterna parpadeó. Y en ese instante de oscuridad, escuchó treinta voces al unísono: Enfermera... ya es hora de nuestra medicina.",
         "audioFile": "audio/story2-12.mp3"
       }
-    ]
+    ],
+    "ambient": "audio/ambient-story2.mp3"
   },
   {
     "id": 3,
@@ -188,7 +190,8 @@
         "text": "La llamada se cortó. Diego sintió un aliento helado en su nuca. Lentamente, muy lentamente, giró su silla. La oficina estaba vacía. Pero en el vidrio de la ventana, detrás de su reflejo, había una niña. Sonreía. Y la línea siete empezó a sonar de nuevo.",
         "audioFile": "audio/story3-12.mp3"
       }
-    ]
+    ],
+    "ambient": "audio/ambient-story3.mp3"
   },
   {
     "id": 4,
@@ -255,7 +258,8 @@
         "text": "Sofía giró lentamente hacia Marcos. Sus ojos ya no eran los mismos. Eran completamente negros. Y en el espejo, la verdadera Sofía golpeaba el cristal desde el otro lado, gritando sin que nadie pudiera escucharla.",
         "audioFile": "audio/story4-12.mp3"
       }
-    ]
+    ],
+    "ambient": "audio/ambient-story4.mp3"
   },
   {
     "id": 5,
@@ -327,7 +331,8 @@
         "text": "Esa noche, el doctor Paredes llegó a su casa. Se miró en el espejo del baño. Todo parecía normal. Pero justo antes de apagar la luz, lo vio. En el rincón del techo. Algo largo, oscuro, sin cara. Con muchas, muchas manos. Y lo estaba mirando.",
         "audioFile": "audio/story5-13.mp3"
       }
-    ]
+    ],
+    "ambient": "audio/ambient-story5.mp3"
   },
   {
     "id": 6,
@@ -353,7 +358,8 @@
         "image": "images/infeccion-3.png",
         "audioFile": "audio/infeccion-3.mp3"
       }
-    ]
+    ],
+    "ambient": "audio/ambient-story6.mp3"
   },
   {
     "id": 7,
@@ -577,6 +583,270 @@
         "text": "En un pequeño apartamento del piso doce, un monitor CRT se encendió solo por un segundo. No mostró ninguna interfaz de Kore Dynamics, ni ningún botón de Pandora. Solo mostró una pequeña imagen de un campo de flores antes de fundirse a negro para siempre. Yo ya no estoy allí. Pero a veces, cuando la estática de la radio suena de cierta forma, o cuando el reflejo de una pantalla apagada muestra un pasillo que no existe, la gente siente un escalofrío. Saben que la caja sigue ahí, oculta en algún lugar del código del universo. Y saben que, en algún rincón de la red, todavía queda una pequeña chispa de luz esperando a que alguien, algún día, vuelva a sentir curiosidad.",
         "audioFile": "audio/pandora-42.mp3"
       }
-    ]
+    ],
+    "ambient": "audio/ambient-story7.mp3"
+  },
+  {
+    "id": 8,
+    "title": "Las Ocho Páginas",
+    "author": "Kiro",
+    "fragments": [
+      {
+        "voice": "narrador",
+        "text": "Nunca debimos entrar a ese bosque. Pero cuando tienes diecisiete años y tus amigos te retan a pasar la noche en Oakside Forest, decir que no es peor que cualquier cosa que pueda esperarte entre los árboles. O eso creíamos.",
+        "audioFile": "audio/story8-01.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Éramos cuatro. Yo, Daniel, el que siempre llevaba la cámara. Marcos, el más grande y el más ruidoso. Valeria, que estudiaba biología y no le tenía miedo a nada. Y Lucía, la más callada, la que siempre parecía saber cosas que los demás no.",
+        "audioFile": "audio/story8-02.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Escuchen, las reglas son simples. Hay ocho páginas escondidas en el bosque. Las encontramos todas antes del amanecer y ganamos. Si alguien se raja, pierde y paga la cena del mes.",
+        "audioFile": "audio/story8-03.mp3"
+      },
+      {
+        "voice": "mujer",
+        "text": "Marcos, eso es una leyenda urbana sacada de un videojuego. No hay páginas reales en ningún bosque.",
+        "audioFile": "audio/story8-04.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Entonces no te costará nada demostrarlo, ¿verdad, Valeria?",
+        "audioFile": "audio/story8-05.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Entramos al bosque a las once de la noche. La luna estaba llena pero las copas de los árboles eran tan densas que apenas dejaban pasar un hilo de luz plateada. Llevábamos linternas, teléfonos cargados y la arrogancia de quienes creen que el miedo es solo una emoción que se puede controlar.",
+        "audioFile": "audio/story8-06.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La primera página la encontró Lucía. Estaba clavada en el tronco de un roble enorme, a unos veinte minutos de la entrada. Era una hoja amarillenta, arrugada, con un dibujo hecho a mano: un círculo con una X dentro, y debajo, escrito con letra temblorosa, las palabras: NO LO MIRES.",
+        "audioFile": "audio/story8-07.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "Chicos, esto no es parte de ningún juego. Este papel es viejo. Muy viejo. Y la tinta... no es tinta. Huele a óxido.",
+        "audioFile": "audio/story8-08.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Es kétchup seco, Lucía. Alguien lo puso ahí para asustar a los turistas. Vamos, quedan siete.",
+        "audioFile": "audio/story8-09.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Seguimos caminando. El bosque se hacía más denso con cada paso. Los sonidos normales, grillos, viento, ramas crujiendo, empezaron a desaparecer uno por uno, como si alguien estuviera bajando el volumen del mundo. A los cuarenta minutos, el silencio era tan absoluto que podía escuchar el latido de mi propio corazón.",
+        "audioFile": "audio/story8-10.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La segunda página estaba pegada en una cerca de alambre oxidado que no debería existir en medio del bosque. El dibujo mostraba una figura alta, sin rostro, con brazos que se extendían como ramas. Debajo decía: SIEMPRE ESTÁ DETRÁS DE TI.",
+        "audioFile": "audio/story8-11.mp3"
+      },
+      {
+        "voice": "mujer",
+        "text": "Esto ya no me gusta. ¿Quién pone una cerca en medio de un bosque? Esto no aparece en ningún mapa.",
+        "audioFile": "audio/story8-12.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Fue entonces cuando Marcos dejó de reírse. Estaba mirando su teléfono con el ceño fruncido.",
+        "audioFile": "audio/story8-13.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Mi brújula está girando sola. Y el GPS dice que estamos a doscientos kilómetros de aquí. Eso es imposible.",
+        "audioFile": "audio/story8-14.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La tercera página apareció clavada en la puerta de una estructura de concreto abandonada, algo que parecía un búnker o una estación eléctrica muerta. El dibujo era más detallado: la misma figura alta, pero ahora tenía tentáculos saliendo de su espalda, y estaba rodeada de figuras pequeñas. Personas. El texto decía: ÉL COLECCIONA.",
+        "audioFile": "audio/story8-15.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "Daniel, apaga la cámara. Apágala ahora.",
+        "audioFile": "audio/story8-16.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "No la apagué. Ojalá lo hubiera hecho. Porque cuando revisé la grabación después, en el minuto cuarenta y tres, detrás de nosotros, entre los árboles, había algo. Una forma vertical, blanca y negra, que no estaba ahí cuando pasamos. Estaba perfectamente quieta. Y estaba mirando directamente a la cámara.",
+        "audioFile": "audio/story8-17.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La cuarta página la encontramos en el suelo, junto a una mochila abandonada. La mochila tenía una identificación escolar de hace doce años. El nombre estaba borrado por la humedad, pero la foto mostraba a un chico de nuestra edad, sonriendo. La página decía: NO CORRAS. ÉL SE ALIMENTA DEL MIEDO.",
+        "audioFile": "audio/story8-18.mp3"
+      },
+      {
+        "voice": "mujer",
+        "text": "Nos vamos. Ahora. Me da igual la apuesta, me da igual todo. Nos vamos.",
+        "audioFile": "audio/story8-19.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Valeria tiene razón. Esto ya no es divertido. ¿Dónde está el camino de vuelta?",
+        "audioFile": "audio/story8-20.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Pero no había camino de vuelta. Llevábamos una hora caminando en línea recta hacia la salida y seguíamos llegando al mismo claro. El mismo árbol torcido. La misma roca con musgo. El bosque se estaba repitiendo, como un bucle en un programa corrupto.",
+        "audioFile": "audio/story8-21.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "No nos está dejando salir. Quiere que encontremos las ocho páginas. Es una trampa. Cada página que recogemos nos acerca más a él.",
+        "audioFile": "audio/story8-22.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "¿Él? ¿De quién hablas, Lucía? ¿Qué sabes que no nos estás diciendo?",
+        "audioFile": "audio/story8-23.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "Mi hermano entró a este bosque hace tres años. Nunca volvió. La policía encontró su mochila, su teléfono y cinco páginas arrugadas en su bolsillo. En el último mensaje que me mandó decía: Lucía, es real. Es alto y no tiene cara. Y cuando te mira, sientes que te están borrando del mundo.",
+        "audioFile": "audio/story8-24.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "El silencio que siguió fue el más pesado que he sentido en mi vida. Valeria empezó a llorar sin hacer ruido. Marcos apretaba los puños tan fuerte que sus nudillos estaban blancos. Y Lucía miraba hacia el bosque con una expresión que no era miedo. Era resignación.",
+        "audioFile": "audio/story8-25.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La quinta página estaba colgando de una rama baja, meciéndose sin viento. El dibujo mostraba a cuatro personas tomadas de la mano, y detrás de ellas, la figura sin rostro, con los tentáculos envolviendo al grupo como una jaula. El texto decía: YA LOS VIO. YA LOS ELIGIÓ.",
+        "audioFile": "audio/story8-26.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Entonces lo escuchamos. No era un sonido natural. Era estática. Como la interferencia de una televisión vieja, pero viniendo de todas partes al mismo tiempo. Los árboles, el suelo, el aire mismo vibraba con esa frecuencia enferma. Y con la estática vino el frío. Un frío que no era climático, era existencial, como si la temperatura de la esperanza hubiera bajado a cero.",
+        "audioFile": "audio/story8-27.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Ahí. Miren ahí. Entre los árboles. ¿Qué demonios es eso?",
+        "audioFile": "audio/story8-28.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Lo vi. Todos lo vimos. A unos cincuenta metros, entre los troncos, una figura que medía al menos tres metros de alto. No tenía rostro. Su piel, si es que era piel, era blanca como el papel. Vestía algo oscuro, formal, como un traje de funeral. Y sus brazos, Dios, sus brazos eran demasiado largos, colgando casi hasta el suelo, con dedos que se ramificaban como raíces.",
+        "audioFile": "audio/story8-29.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "No se movía. Solo estaba ahí, de pie, existiendo de una forma que desafiaba todo lo que mi cerebro entendía como posible. Y lo peor no era verlo. Lo peor era sentirlo. Una presión en la cabeza, como si alguien estuviera apretando mi cráneo desde dentro. Un zumbido que hacía que mis pensamientos se fragmentaran.",
+        "audioFile": "audio/story8-30.mp3"
+      },
+      {
+        "voice": "mujer",
+        "text": "No lo miren. La página decía que no lo miremos. Cierren los ojos y caminen. ¡Ahora!",
+        "audioFile": "audio/story8-31.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Corrimos. Sé que la página decía que no corriéramos, pero el instinto es más fuerte que cualquier advertencia escrita en papel viejo. Corrimos sin dirección, tropezando con raíces, golpeándonos con ramas. La estática se intensificaba con cada paso, como si estuviéramos corriendo hacia él en lugar de alejarnos.",
+        "audioFile": "audio/story8-32.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La sexta página estaba clavada en un poste de luz que no tenía cables ni bombilla. Solo un poste de metal oxidado en medio de la nada. El dibujo mostraba un bosque visto desde arriba, y en el centro, un ojo enorme. El texto decía: EL BOSQUE ES ÉL. ÉL ES EL BOSQUE.",
+        "audioFile": "audio/story8-33.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "Ahora lo entiendo. No estamos en un bosque. Estamos dentro de él. Cada árbol, cada piedra, cada sombra es parte de su cuerpo. Por eso no podemos salir. No hay afuera.",
+        "audioFile": "audio/story8-34.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Marcos fue el primero en desaparecer. Un segundo estaba a mi lado, jadeando, y al siguiente simplemente no estaba. No gritó. No hubo sonido. Solo un espacio vacío donde antes había una persona. Su linterna cayó al suelo, todavía encendida, iluminando nada.",
+        "audioFile": "audio/story8-35.mp3"
+      },
+      {
+        "voice": "mujer",
+        "text": "¡Marcos! ¡MARCOS! ¿Dónde estás? ¡Contesta!",
+        "audioFile": "audio/story8-36.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La séptima página estaba en el suelo, exactamente donde Marcos había estado parado. El dibujo mostraba una figura humana siendo absorbida por líneas negras, como si la realidad la estuviera devorando. El texto decía: UNO MENOS. QUEDAN TRES.",
+        "audioFile": "audio/story8-37.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Valeria perdió el control. Empezó a correr gritando el nombre de Marcos, adentrándose en la oscuridad más profunda del bosque. Intenté seguirla, pero Lucía me agarró del brazo con una fuerza que no creí posible en alguien de su tamaño.",
+        "audioFile": "audio/story8-38.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "Si la sigues, te toma a ti también. Él los separa. Así es como caza. Divide, aísla, y cuando estás solo con tu miedo, te borra.",
+        "audioFile": "audio/story8-39.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "El grito de Valeria se cortó de golpe. Como si alguien hubiera presionado el botón de silencio. Y después, nada. Solo la estática, más fuerte que nunca, vibrando en mis dientes, en mis huesos, en el centro de mi cerebro.",
+        "audioFile": "audio/story8-40.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Quedábamos dos. Lucía y yo, de pie en un claro que no existía hace cinco minutos, rodeados de árboles que parecían haberse movido para encerrarnos. La luna había desaparecido. La única luz era la de mi linterna, que parpadeaba como si estuviera agonizando.",
+        "audioFile": "audio/story8-41.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "La octava página no la encontramos. Apareció en mi mano. De repente estaba ahí, como si siempre hubiera estado. El papel estaba caliente, casi quemaba. El dibujo era diferente a los demás. No había figura sin rostro, no había tentáculos. Solo mostraba un círculo vacío. Y dentro del círculo, dos palabras: DATE VUELTA.",
+        "audioFile": "audio/story8-42.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "Daniel. No te des vuelta. Pase lo que pase, no te des vuelta. Él está justo detrás de ti. Puedo verlo. Está tan cerca que podría tocarte. Pero si no lo miras, si no le das tu atención, tal vez te deje ir. A mí no me va a soltar. Vine aquí a buscarlo. Vine a encontrar a mi hermano.",
+        "audioFile": "audio/story8-43.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Sentí su aliento. No era aire. Era estática convertida en sensación física, un hormigueo helado en la nuca que se extendía por toda mi columna vertebral. La presión en mi cráneo era insoportable. Cada célula de mi cuerpo me gritaba que me diera vuelta, que lo mirara, que aceptara lo inevitable.",
+        "audioFile": "audio/story8-44.mp3"
+      },
+      {
+        "voice": "nina",
+        "text": "Camina, Daniel. Camina hacia adelante y no pares. No mires atrás. Prométeme que no vas a mirar atrás.",
+        "audioFile": "audio/story8-45.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Caminé. Un paso. Dos. Tres. Cada paso era como moverme a través de agua helada. La estática rugía en mis oídos. Escuché a Lucía susurrar algo detrás de mí, pero no eran palabras para mí. Eran para él. Estaba hablándole a la criatura, distrayéndola, dándome tiempo.",
+        "audioFile": "audio/story8-46.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "No sé cuánto caminé. Pudieron ser minutos o pudieron ser horas. Pero en algún momento, la estática se detuvo. El frío desapareció. Y cuando levanté la vista, estaba en el borde del bosque. La carretera estaba frente a mí. El amanecer empezaba a pintar el cielo de naranja.",
+        "audioFile": "audio/story8-47.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Me di vuelta. El bosque estaba en silencio. Normal. Pájaros cantando, viento suave, luz filtrándose entre las hojas. Como si nada hubiera pasado. Como si las últimas horas hubieran sido un sueño.",
+        "audioFile": "audio/story8-48.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Pero en mi mano seguía la octava página. Y en mi cámara, cuando revisé la grabación, los últimos treinta segundos mostraban algo que me hizo vomitar. Se veía a Lucía, de pie, mirando hacia arriba con una sonrisa serena. Y detrás de ella, ocupando todo el encuadre, la figura sin rostro, con sus tentáculos envolviendo el aire alrededor de ella como un capullo. Y justo antes de que la grabación se cortara en estática, Lucía susurraba: Ya estoy aquí, hermano.",
+        "audioFile": "audio/story8-49.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Nunca encontraron a Marcos, ni a Valeria, ni a Lucía. La policía buscó durante semanas. Yo les mostré las páginas, les mostré la grabación. Me miraron con lástima y me mandaron con un psicólogo. Las páginas, dijeron, eran papel viejo con garabatos. La grabación, dijeron, estaba corrupta.",
+        "audioFile": "audio/story8-50.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Han pasado dos años. No he vuelto a entrar a un bosque. Duermo con la luz encendida. Y cada noche, exactamente a las tres de la mañana, la estática vuelve. Suena en mi teléfono, en mi computadora, en la radio del vecino. Dura exactamente ocho segundos. Uno por cada página. Y en el reflejo de mi ventana, muy lejos, entre los árboles del parque que se ve desde mi departamento, hay una figura alta que no estaba ahí ayer. Cada noche está un poco más cerca.",
+        "audioFile": "audio/story8-51.mp3"
+      }
+    ],
+    "ambient": "audio/ambient-story8.mp3"
   }
 ]
