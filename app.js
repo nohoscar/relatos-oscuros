@@ -10,6 +10,8 @@ const VOICE_LABELS = {
   mujer: "Mujer",
   anciano: "Anciano",
   nina: "Niña",
+  entidad: "Entidad",
+  anciana: "Anciana",
 };
 
 let currentStory = null;

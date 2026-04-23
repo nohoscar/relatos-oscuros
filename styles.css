@@ -17,6 +17,8 @@
   --mujer: #c47878;
   --anciano: #b09a6b;
   --nina: #6bb09a;
+  --entidad: #c4a0d4;
+  --anciana: #b09a6b;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -283,6 +285,8 @@ body {
 .voice-tag.mujer { background: rgba(196,120,120,0.1); color: var(--mujer); }
 .voice-tag.anciano { background: rgba(176,154,107,0.1); color: var(--anciano); }
 .voice-tag.nina { background: rgba(107,176,154,0.1); color: var(--nina); }
+.voice-tag.entidad { background: rgba(196,160,212,0.1); color: var(--entidad); }
+.voice-tag.anciana { background: rgba(176,154,107,0.1); color: var(--anciana); }
 
 /* Listen button */
 .btn-listen {
@@ -371,6 +375,8 @@ body {
 .fragment-voice.mujer { color: var(--mujer); }
 .fragment-voice.anciano { color: var(--anciano); }
 .fragment-voice.nina { color: var(--nina); }
+.fragment-voice.entidad { color: var(--entidad); }
+.fragment-voice.anciana { color: var(--anciana); }
 
 .fragment-text {
   line-height: 2;
