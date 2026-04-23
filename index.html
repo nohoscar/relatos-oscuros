@@ -13,7 +13,20 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app">
+
+  <!-- Splash Screen -->
+  <div id="splash" class="splash">
+    <div class="splash-content">
+      <div class="splash-candle">🕯️</div>
+      <h1 class="splash-title">Relatos Oscuros</h1>
+      <p class="splash-sub">Donde las sombras tienen voz</p>
+      <p class="splash-hint">🎧 Se recomienda usar audífonos</p>
+      <button id="btn-enter" class="btn-enter" onclick="enterApp()">Entrar</button>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div id="app" class="app hidden">
     <!-- Sidebar / Story List -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
@@ -24,6 +37,7 @@
             <p class="tagline">Donde las sombras tienen voz</p>
           </div>
         </div>
+        <button id="btn-ambient-toggle" class="btn-ambient" onclick="toggleAmbient()" title="Sonido ambiente">🔊</button>
       </div>
       <div id="stories-list" class="stories-list"></div>
     </aside>

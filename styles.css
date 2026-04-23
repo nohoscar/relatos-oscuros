@@ -1,5 +1,107 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap');
 
+/* ===== SPLASH SCREEN ===== */
+.splash {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease;
+}
+
+.splash.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.splash-candle {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: flicker 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 160, 50, 0.5));
+}
+
+.splash-title {
+  font-family: 'Cinzel', serif;
+  font-size: 3rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 0 40px rgba(201, 168, 76, 0.2);
+  margin-bottom: 0.5rem;
+}
+
+.splash-sub {
+  font-family: 'Crimson Text', serif;
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 1.15rem;
+  letter-spacing: 2px;
+  margin-bottom: 2.5rem;
+}
+
+.splash-hint {
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+  opacity: 0.6;
+}
+
+.btn-enter {
+  font-family: 'Cinzel', serif;
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 0.9rem 3rem;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.btn-enter:hover {
+  background: rgba(201, 168, 76, 0.08);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.1);
+}
+
+/* Ambient toggle */
+.btn-ambient {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-ambient:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-ambient.muted {
+  opacity: 0.4;
+}
+
 :root {
   --bg: #08060a;
   --bg-card: #0e0b12;
@@ -53,6 +155,9 @@ body {
 .sidebar-header {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logo {
@@ -486,6 +591,14 @@ body {
 
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
+  .splash-title {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+  }
+
+  .splash-candle { font-size: 3rem; }
+  .splash-sub { font-size: 1rem; }
+
   .app {
     flex-direction: column;
   }

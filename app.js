@@ -31,6 +31,7 @@ function startAmbient() {
   ambientAudio.loop = true;
   ambientAudio.volume = 0.3;
   ambientAudio.play().catch(() => {});
+  updateAmbientButton();
 }
 
 function stopAmbient() {
@@ -38,14 +39,43 @@ function stopAmbient() {
   ambientAudio.pause();
   ambientAudio.currentTime = 0;
   ambientAudio = null;
+  updateAmbientButton();
 }
 
-// Start ambient on first user interaction (browser requirement)
-function initAmbient() {
-  startAmbient();
-  document.removeEventListener("click", initAmbient);
+function toggleAmbient() {
+  if (ambientAudio) {
+    stopAmbient();
+    ambientMuted = true;
+  } else {
+    startAmbient();
+    ambientMuted = false;
+  }
 }
-document.addEventListener("click", initAmbient);
+
+let ambientMuted = false;
+
+function updateAmbientButton() {
+  const btn = document.getElementById("btn-ambient-toggle");
+  if (!btn) return;
+  if (ambientAudio) {
+    btn.textContent = "🔊";
+    btn.classList.remove("muted");
+  } else {
+    btn.textContent = "🔇";
+    btn.classList.add("muted");
+  }
+}
+
+// ============================================
+// Splash screen
+// ============================================
+function enterApp() {
+  const splash = document.getElementById("splash");
+  splash.classList.add("fade-out");
+  document.getElementById("app").classList.remove("hidden");
+  startAmbient();
+  setTimeout(() => splash.remove(), 800);
+}
 
 // ============================================
 // Render sidebar story list
@@ -158,7 +188,7 @@ function goBack() {
   document.getElementById("reader-content").classList.add("hidden");
   document.getElementById("reader-content").innerHTML = "";
   renderStories();
-  startAmbient();
+  if (!ambientMuted) startAmbient();
 }
 
 // ============================================
