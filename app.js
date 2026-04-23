@@ -1,15 +1,15 @@
 // ============================================
-// Relatos Oscuros - App Frontend (Estático)
+// Relatos Oscuros - App v2
 // ============================================
 
 let STORIES = [];
 
 const VOICE_LABELS = {
-  narrador: { label: "Narrador", emoji: "📖" },
-  hombre: { label: "Hombre", emoji: "🧔" },
-  mujer: { label: "Mujer", emoji: "👩" },
-  anciano: { label: "Anciano", emoji: "👴" },
-  nina: { label: "Niña", emoji: "👧" },
+  narrador: "Narrador",
+  hombre: "Hombre",
+  mujer: "Mujer",
+  anciano: "Anciano",
+  nina: "Niña",
 };
 
 let currentStory = null;
@@ -17,55 +17,34 @@ let currentFragmentIndex = 0;
 let audioQueue = [];
 let isPlaying = false;
 let currentAudio = null;
-
-// Hash MD5 simple para generar el nombre del archivo de audio
-async function md5(text) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("").substring(0, 32);
-}
-
-// Verifica si un archivo de audio existe
-async function audioExists(url) {
-  try {
-    const res = await fetch(url, { method: "HEAD" });
-    return res.ok;
-  } catch { return false; }
-}
-
-// Checa si la historia tiene audios pregenerados
-async function storyHasAudio(story) {
-  if (!story.fragments || story.fragments.length === 0) return false;
-  const f = story.fragments[0];
-  if (f.audioFile) return true;
-  return false;
-}
+const isMobile = () => window.innerWidth <= 768;
 
 // ============================================
-// Render stories list
+// Render sidebar story list
 // ============================================
 function renderStories() {
   const container = document.getElementById("stories-list");
   container.innerHTML = STORIES.map(story => {
-    const preview = story.fragments[0].text.substring(0, 150) + "...";
-    const voices = [...new Set(story.fragments.map(f => f.voice))];
-    const charTags = voices.map(v => {
-      const info = VOICE_LABELS[v] || { label: v, emoji: "🎭" };
-      return `<span class="character-tag ${v}">${info.label}</span>`;
-    }).join("");
-
     const hasAudio = story.fragments.some(f => f.audioFile);
-    const audioIcon = hasAudio ? '<span class="audio-badge">🎧</span>' : '';
+    const isActive = currentStory && currentStory.id === story.id;
+
+    const coverHTML = story.cover
+      ? `<div class="story-card-cover" style="background-image: url('${story.cover}')"></div>`
+      : `<div class="story-card-cover no-cover">🕯️</div>`;
 
     return `
-      <div class="story-card" onclick="openStory(${story.id})">
-        <div class="story-card-content">
-          <h2>${story.title} ${audioIcon}</h2>
-          <div class="story-meta">${story.fragments.length} fragmentos · ${story.author}</div>
-          <div class="story-preview">${preview}</div>
-          <div class="characters">${charTags}</div>
+      <div class="story-card ${isActive ? 'active' : ''}" onclick="openStory(${story.id})">
+        <div class="story-card-inner">
+          ${coverHTML}
+          <div class="story-card-info">
+            <div class="story-card-title">${story.title}</div>
+            <div class="story-card-meta">
+              <span>${story.fragments.length} fragmentos</span>
+              <span>·</span>
+              <span>${story.author}</span>
+              ${hasAudio ? '<span class="badge-audio">AUDIO</span>' : ''}
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -73,59 +52,86 @@ function renderStories() {
 }
 
 // ============================================
-// Open a story
+// Open story in reader
 // ============================================
 function openStory(id) {
   currentStory = STORIES.find(s => s.id === id);
   if (!currentStory) return;
 
-  const container = document.getElementById("stories-list");
+  const reader = document.getElementById("reader");
+  const empty = document.getElementById("reader-empty");
+  const content = document.getElementById("reader-content");
+
+  // Mobile: show reader, hide sidebar
+  if (isMobile()) {
+    document.getElementById("sidebar").classList.add("hidden-mobile");
+    reader.classList.add("active-mobile");
+  }
+
+  empty.classList.add("hidden");
+  content.classList.remove("hidden");
+
+  const coverHTML = currentStory.cover
+    ? `<div class="reader-cover" style="background-image: url('${currentStory.cover}')"></div>`
+    : '';
+
+  const voices = [...new Set(currentStory.fragments.map(f => f.voice))];
+  const voiceTags = voices.map(v =>
+    `<span class="voice-tag ${v}">${VOICE_LABELS[v] || v}</span>`
+  ).join("");
+
+  const hasAudio = currentStory.fragments.some(f => f.audioFile);
+  const listenBtn = hasAudio
+    ? `<button class="btn-listen" id="btn-listen" onclick="listenStory()">▶ Escuchar Relato</button>`
+    : `<div class="no-audio">🎧 Audio próximamente...</div>`;
+
   const fragmentsHTML = currentStory.fragments.map((f, i) => {
-    const info = VOICE_LABELS[f.voice] || { label: f.voice, emoji: "🎭" };
     const imgHTML = f.image
       ? `<div class="fragment-image"><img src="${f.image}" alt="" loading="lazy" /></div>`
       : '';
     return `
       <div class="fragment" id="fragment-${i}">
         ${imgHTML}
-        <div class="fragment-voice">${info.label}</div>
+        <div class="fragment-voice ${f.voice}">${VOICE_LABELS[f.voice] || f.voice}</div>
         <div class="fragment-text">${f.text}</div>
       </div>
     `;
   }).join("");
 
-  const coverHTML = currentStory.cover
-    ? `<div class="story-expanded-cover" style="background-image: url('${currentStory.cover}')"></div>`
-    : '';
-
-  const hasAudio = currentStory.fragments.some(f => f.audioFile);
-  const listenBtn = hasAudio
-    ? `<button class="btn-listen" id="btn-listen" onclick="listenStory()">▶ Escuchar Relato</button>`
-    : `<div class="no-audio">Audio próximamente...</div>`;
-
-  container.innerHTML = `
-    <div class="story-expanded">
-      <button class="btn-back" onclick="goBack()">← Volver</button>
-      ${coverHTML}
-      <h2>${currentStory.title}</h2>
-      <div class="story-author">${currentStory.author}</div>
-      ${listenBtn}
-      ${fragmentsHTML}
+  content.innerHTML = `
+    <button class="btn-back-mobile" onclick="goBack()">← Volver</button>
+    ${coverHTML}
+    <div class="reader-header">
+      <h2 class="reader-title">${currentStory.title}</h2>
+      <div class="reader-author">${currentStory.author}</div>
+      <div class="reader-voices">${voiceTags}</div>
     </div>
+    ${listenBtn}
+    ${fragmentsHTML}
   `;
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  content.scrollTop = 0;
+  reader.scrollTop = 0;
+  renderStories(); // Update active state
 }
 
 function goBack() {
   stopPlayback();
   currentStory = null;
+
+  if (isMobile()) {
+    document.getElementById("sidebar").classList.remove("hidden-mobile");
+    document.getElementById("reader").classList.remove("active-mobile");
+  }
+
+  document.getElementById("reader-empty").classList.remove("hidden");
+  document.getElementById("reader-content").classList.add("hidden");
+  document.getElementById("reader-content").innerHTML = "";
   renderStories();
-  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // ============================================
-// Audio playback (desde archivos estáticos)
+// Audio playback
 // ============================================
 async function listenStory() {
   if (!currentStory) return;
@@ -139,12 +145,10 @@ async function listenStory() {
     for (const f of currentStory.fragments) {
       if (f.audioFile) {
         const res = await fetch(f.audioFile);
-        if (!res.ok) throw new Error("Audio no encontrado: " + f.audioFile);
-        const blob = await res.blob();
-        audioQueue.push(blob);
+        if (!res.ok) throw new Error("Audio no encontrado");
+        audioQueue.push(await res.blob());
       }
     }
-
     if (audioQueue.length === 0) throw new Error("No hay audios");
 
     btn.textContent = "▶ Reproduciendo...";
@@ -155,25 +159,18 @@ async function listenStory() {
     console.error(err);
     btn.disabled = false;
     btn.textContent = "▶ Escuchar Relato";
-    alert("Error cargando el audio.");
   }
 }
 
 function playFragment(index) {
-  if (index >= audioQueue.length) {
-    stopPlayback();
-    return;
-  }
+  if (index >= audioQueue.length) { stopPlayback(); return; }
 
   currentFragmentIndex = index;
   highlightFragment(index);
   updatePlayerInfo(index);
 
   const url = URL.createObjectURL(audioQueue[index]);
-  if (currentAudio) {
-    currentAudio.pause();
-    URL.revokeObjectURL(currentAudio.src);
-  }
+  if (currentAudio) { currentAudio.pause(); URL.revokeObjectURL(currentAudio.src); }
 
   currentAudio = new Audio(url);
   isPlaying = true;
@@ -186,10 +183,7 @@ function playFragment(index) {
     }
   });
 
-  currentAudio.addEventListener("ended", () => {
-    playFragment(index + 1);
-  });
-
+  currentAudio.addEventListener("ended", () => playFragment(index + 1));
   currentAudio.play();
 }
 
@@ -204,10 +198,9 @@ function highlightFragment(index) {
 function updatePlayerInfo(index) {
   if (!currentStory) return;
   const frag = currentStory.fragments[index];
-  const info = VOICE_LABELS[frag.voice] || { label: frag.voice };
   document.getElementById("player-title").textContent = currentStory.title;
   document.getElementById("player-fragment").textContent =
-    `${info.label}: ${frag.text.substring(0, 60)}...`;
+    `${VOICE_LABELS[frag.voice] || frag.voice}: ${frag.text.substring(0, 50)}...`;
 }
 
 function updatePlayButton() {
@@ -219,20 +212,12 @@ function showPlayer() {
 }
 
 function stopPlayback() {
-  if (currentAudio) {
-    currentAudio.pause();
-    URL.revokeObjectURL(currentAudio.src);
-    currentAudio = null;
-  }
+  if (currentAudio) { currentAudio.pause(); URL.revokeObjectURL(currentAudio.src); currentAudio = null; }
   isPlaying = false;
   document.getElementById("player").classList.add("hidden");
   document.querySelectorAll(".fragment").forEach(el => el.classList.remove("active"));
-
   const btn = document.getElementById("btn-listen");
-  if (btn) {
-    btn.disabled = false;
-    btn.textContent = "▶ Escuchar Relato";
-  }
+  if (btn) { btn.disabled = false; btn.textContent = "▶ Escuchar Relato"; }
 }
 
 // ============================================
@@ -240,13 +225,8 @@ function stopPlayback() {
 // ============================================
 document.getElementById("btn-play").addEventListener("click", () => {
   if (!currentAudio) return;
-  if (isPlaying) {
-    currentAudio.pause();
-    isPlaying = false;
-  } else {
-    currentAudio.play();
-    isPlaying = true;
-  }
+  if (isPlaying) { currentAudio.pause(); isPlaying = false; }
+  else { currentAudio.play(); isPlaying = true; }
   updatePlayButton();
 });
 

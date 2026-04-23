@@ -3,45 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#08060a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Historias de terror narradas con voces del más allá">
   <title>Relatos Oscuros</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="fog-overlay"></div>
-  <div class="vignette"></div>
+  <div class="app">
+    <!-- Sidebar / Story List -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">🕯️</span>
+          <div>
+            <h1>Relatos Oscuros</h1>
+            <p class="tagline">Donde las sombras tienen voz</p>
+          </div>
+        </div>
+      </div>
+      <div id="stories-list" class="stories-list"></div>
+    </aside>
 
-  <div class="container">
-    <header>
-      <div class="candle">🕯️</div>
-      <h1>Relatos Oscuros</h1>
-      <p class="subtitle">Donde las sombras tienen voz</p>
-      <div class="header-line"></div>
-    </header>
-
-    <section id="stories-list" class="stories-list"></section>
+    <!-- Main Content / Reader -->
+    <main id="reader" class="reader">
+      <div id="reader-empty" class="reader-empty">
+        <div class="empty-icon">📖</div>
+        <p>Selecciona un relato para comenzar</p>
+      </div>
+      <div id="reader-content" class="reader-content hidden"></div>
+    </main>
 
     <!-- Player -->
     <div id="player" class="player hidden">
+      <div class="player-progress-top">
+        <div id="progress-bar" class="progress-bar">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
       <div class="player-inner">
         <div class="player-info">
           <span id="player-title" class="player-title"></span>
           <span id="player-fragment" class="player-fragment"></span>
         </div>
         <div class="player-controls">
-          <button id="btn-prev" class="btn-control" title="Anterior">⏮</button>
-          <button id="btn-play" class="btn-control btn-play" title="Reproducir">▶</button>
-          <button id="btn-next" class="btn-control" title="Siguiente">⏭</button>
-        </div>
-        <div class="player-progress">
-          <div id="progress-bar" class="progress-bar">
-            <div id="progress-fill" class="progress-fill"></div>
-          </div>
+          <button id="btn-prev" class="btn-ctrl" title="Anterior">⏮</button>
+          <button id="btn-play" class="btn-ctrl btn-play-main" title="Reproducir">▶</button>
+          <button id="btn-next" class="btn-ctrl" title="Siguiente">⏭</button>
         </div>
       </div>
     </div>
