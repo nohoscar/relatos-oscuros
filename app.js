@@ -24,6 +24,17 @@ let ambientAudio = null;
 let storyAmbientAudio = null;
 const isMobile = () => window.innerWidth <= 768;
 
+// Velocidad y volumen de la narración (persistidos)
+const SPEEDS = [1, 1.25, 1.5, 0.75];
+let playbackRate = 1;
+let narrationVolume = 1;
+try {
+  const r = parseFloat(localStorage.getItem("relatos-rate"));
+  if (!isNaN(r) && SPEEDS.includes(r)) playbackRate = r;
+  const v = parseFloat(localStorage.getItem("relatos-volume"));
+  if (!isNaN(v)) narrationVolume = Math.min(Math.max(v, 0), 1);
+} catch {}
+
 // ============================================
 // Progreso de escucha (localStorage)
 // ============================================
@@ -316,6 +327,8 @@ function playFragment(index) {
   currentAudio = preloadedAudio[index] || new Audio(audioQueue[index]);
   preloadedAudio = {};
   currentAudio.currentTime = 0;
+  currentAudio.playbackRate = playbackRate;
+  currentAudio.volume = narrationVolume;
 
   isPlaying = true;
   updatePlayButton();
@@ -467,6 +480,50 @@ document.getElementById("btn-prev").addEventListener("click", () => {
 document.getElementById("btn-next").addEventListener("click", () => {
   if (currentFragmentIndex < audioQueue.length - 1) playFragment(currentFragmentIndex + 1);
 });
+
+// Velocidad: botón que cicla entre las velocidades disponibles
+function updateSpeedButton() {
+  document.getElementById("btn-speed").textContent = playbackRate + "x";
+}
+
+document.getElementById("btn-speed").addEventListener("click", () => {
+  const idx = SPEEDS.indexOf(playbackRate);
+  playbackRate = SPEEDS[(idx + 1) % SPEEDS.length];
+  if (currentAudio) currentAudio.playbackRate = playbackRate;
+  updateSpeedButton();
+  try { localStorage.setItem("relatos-rate", String(playbackRate)); } catch {}
+});
+
+// Volumen de la narración: botón con slider emergente
+const volumeControlEl = document.querySelector(".volume-control");
+const btnVolumeEl = document.getElementById("btn-volume");
+const volumeSliderEl = document.getElementById("volume-slider");
+
+function updateVolumeButton() {
+  btnVolumeEl.textContent = narrationVolume === 0 ? "🔇" : narrationVolume < 0.5 ? "🔈" : "🔊";
+}
+
+btnVolumeEl.addEventListener("click", (e) => {
+  e.stopPropagation();
+  volumeControlEl.classList.toggle("open");
+});
+
+volumeSliderEl.addEventListener("input", () => {
+  narrationVolume = parseFloat(volumeSliderEl.value);
+  if (currentAudio) currentAudio.volume = narrationVolume;
+  updateVolumeButton();
+  try { localStorage.setItem("relatos-volume", String(narrationVolume)); } catch {}
+});
+
+// Cerrar el slider al tocar fuera
+document.addEventListener("click", (e) => {
+  if (!volumeControlEl.contains(e.target)) volumeControlEl.classList.remove("open");
+});
+
+// Estado inicial de los controles
+updateSpeedButton();
+updateVolumeButton();
+volumeSliderEl.value = narrationVolume;
 
 // ============================================
 // Init

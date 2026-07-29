@@ -625,6 +625,47 @@ body {
   color: var(--gold);
 }
 
+/* Botón de velocidad (pill) */
+.btn-speed {
+  width: auto;
+  min-width: 42px;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Control de volumen con slider emergente */
+.volume-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.volume-slider {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  accent-color: var(--gold);
+  background: rgba(20, 16, 26, 0.96);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.5rem 0.6rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  cursor: pointer;
+}
+
+.volume-control.open .volume-slider {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .splash-title {
