@@ -35,6 +35,14 @@ try {
   if (!isNaN(v)) narrationVolume = Math.min(Math.max(v, 0), 1);
 } catch {}
 
+// Estado de UI: historia sonando, carga, búsqueda y hint de primera vez
+let playingStoryId = null;
+let isLoading = false;
+let searchQuery = "";
+const HINT_KEY = "relatos-hint-seen";
+let hintSeen = false;
+try { hintSeen = localStorage.getItem(HINT_KEY) === "1"; } catch {}
+
 // ============================================
 // Progreso de escucha (localStorage)
 // ============================================
@@ -157,31 +165,70 @@ function unduckAmbient() { rampAmbient(AMBIENT_STORY_VOLUME); }
 // ============================================
 // Render sidebar story list
 // ============================================
+// Normaliza texto (sin acentos, minúsculas) para búsqueda
+function norm(s) {
+  return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+// Duración estimada de una historia a partir del texto (~13 caracteres/seg)
+function estimateMinutes(story) {
+  const chars = story.fragments.reduce((n, f) => n + (f.text ? f.text.length : 0), 0);
+  return Math.max(1, Math.round(chars / 13 / 60));
+}
+
 function renderStories() {
   const container = document.getElementById("stories-list");
-  container.innerHTML = STORIES.map(story => {
+  const q = norm(searchQuery.trim());
+  const list = q ? STORIES.filter(s => norm(s.title).includes(q)) : STORIES;
+
+  if (list.length === 0) {
+    container.innerHTML = `<div class="list-empty">No encontré relatos con "${searchQuery.trim()}"</div>`;
+    return;
+  }
+
+  const hintHTML = (!hintSeen && !q)
+    ? `<div class="list-hint">👆 Toca un relato para escuchar</div>`
+    : "";
+
+  container.innerHTML = hintHTML + list.map(story => {
     const hasAudio = story.fragments.some(f => f.audioFile);
     const isActive = currentStory && currentStory.id === story.id;
+    const mins = estimateMinutes(story);
 
     const coverHTML = story.cover
       ? `<div class="story-card-cover" style="background-image: url('${story.cover}')"></div>`
       : `<div class="story-card-cover no-cover">🕯️</div>`;
 
     return `
-      <div class="story-card ${isActive ? 'active' : ''}" onclick="openStory(${story.id})">
+      <div class="story-card ${isActive ? 'active' : ''}" data-story-id="${story.id}" onclick="openStory(${story.id})">
         <div class="story-card-inner">
           ${coverHTML}
           <div class="story-card-info">
             <div class="story-card-title">${story.title}</div>
             <div class="story-card-meta">
               <span>${story.fragments.length} fragmentos</span>
+              <span>·</span>
+              <span>~${mins} min</span>
               ${hasAudio ? '<span class="badge-audio">AUDIO</span>' : ''}
+              <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
             </div>
           </div>
         </div>
       </div>
     `;
   }).join("");
+
+  updatePlayingUI();
+}
+
+// Marca la tarjeta que está sonando (ecualizador), sin re-renderizar la lista
+function updatePlayingUI() {
+  document.querySelectorAll(".story-card").forEach(card => {
+    const id = Number(card.dataset.storyId);
+    const playing = id === playingStoryId;
+    card.classList.toggle("playing", playing);
+    card.classList.toggle("paused", playing && !isPlaying);
+  });
 }
 
 // ============================================
@@ -190,6 +237,11 @@ function renderStories() {
 function openStory(id) {
   currentStory = STORIES.find(s => s.id === id);
   if (!currentStory) return;
+
+  if (!hintSeen) {
+    hintSeen = true;
+    try { localStorage.setItem(HINT_KEY, "1"); } catch {}
+  }
 
   const reader = document.getElementById("reader");
   const empty = document.getElementById("reader-empty");
@@ -331,8 +383,11 @@ function playFragment(index) {
   currentAudio.volume = narrationVolume;
 
   isPlaying = true;
+  playingStoryId = currentStory ? currentStory.id : null;
+  isLoading = true;
   updatePlayButton();
   updateMediaSession(index);
+  updatePlayingUI();
 
   currentAudio.ontimeupdate = () => {
     if (currentAudio.duration) {
@@ -340,6 +395,11 @@ function playFragment(index) {
       document.getElementById("progress-fill").style.width = pct + "%";
     }
   };
+
+  // Spinner de carga mientras el audio bufferea
+  currentAudio.onplaying = () => { isLoading = false; updatePlayButton(); };
+  currentAudio.oncanplay = () => { isLoading = false; updatePlayButton(); };
+  currentAudio.onwaiting = () => { isLoading = true; updatePlayButton(); };
 
   currentAudio.onended = () => playFragment(index + 1);
   currentAudio.play().catch(() => {});
@@ -366,7 +426,9 @@ function updatePlayerInfo(index) {
 }
 
 function updatePlayButton() {
-  document.getElementById("btn-play").textContent = isPlaying ? "⏸" : "▶";
+  const btn = document.getElementById("btn-play");
+  btn.classList.toggle("loading", isLoading);
+  btn.textContent = isLoading ? "" : (isPlaying ? "⏸" : "▶");
 }
 
 function showPlayer() {
@@ -378,8 +440,11 @@ function stopPlayback() {
   preloadedAudio = {};
   unduckAmbient(); // el ambiente vuelve a su volumen normal
   isPlaying = false;
+  isLoading = false;
+  playingStoryId = null;
   document.getElementById("player").classList.add("hidden");
   document.querySelectorAll(".fragment").forEach(el => el.classList.remove("active"));
+  updatePlayingUI();
   if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "none";
   const btn = document.getElementById("btn-listen");
   if (btn) { btn.disabled = false; btn.textContent = "▶ Escuchar Relato"; }
@@ -397,6 +462,7 @@ function setupMediaSession() {
     isPlaying = true;
     duckAmbient();
     updatePlayButton();
+    updatePlayingUI();
     navigator.mediaSession.playbackState = "playing";
   });
 
@@ -406,6 +472,7 @@ function setupMediaSession() {
     isPlaying = false;
     unduckAmbient();
     updatePlayButton();
+    updatePlayingUI();
     navigator.mediaSession.playbackState = "paused";
   });
 
@@ -443,6 +510,7 @@ document.getElementById("btn-play").addEventListener("click", () => {
   if (isPlaying) { currentAudio.pause(); isPlaying = false; unduckAmbient(); }
   else { currentAudio.play().catch(() => {}); isPlaying = true; duckAmbient(); }
   updatePlayButton();
+  updatePlayingUI();
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
   }
@@ -519,6 +587,15 @@ volumeSliderEl.addEventListener("input", () => {
 document.addEventListener("click", (e) => {
   if (!volumeControlEl.contains(e.target)) volumeControlEl.classList.remove("open");
 });
+
+// Buscador de historias
+const searchInputEl = document.getElementById("story-search");
+if (searchInputEl) {
+  searchInputEl.addEventListener("input", () => {
+    searchQuery = searchInputEl.value;
+    renderStories();
+  });
+}
 
 // Estado inicial de los controles
 updateSpeedButton();

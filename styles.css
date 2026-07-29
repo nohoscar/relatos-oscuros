@@ -319,7 +319,9 @@ body {
   font-size: 0.7rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  row-gap: 0.2rem;
 }
 
 .badge-audio {
@@ -883,4 +885,102 @@ body {
 @keyframes toast-in {
   from { opacity: 0; transform: translate(-50%, 12px); }
   to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ============================================
+   Buscador de historias
+   ============================================ */
+.search-box {
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+#story-search {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-bright);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  padding: 0.55rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#story-search::placeholder { color: var(--text-dim); }
+
+#story-search:focus { border-color: var(--gold-dim); }
+
+/* Hint de primera vez y mensaje de lista vacía */
+.list-hint {
+  color: var(--text-dim);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 0.4rem 1rem 0.75rem;
+  opacity: 0.9;
+  animation: toast-in 0.4s ease;
+}
+
+.list-empty {
+  color: var(--text-dim);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+/* ============================================
+   Ecualizador: historia que está sonando
+   ============================================ */
+.story-card .eq { display: none; }
+
+.story-card.playing .eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 11px;
+  margin-left: 0.15rem;
+}
+
+.story-card .eq i {
+  width: 3px;
+  background: var(--gold);
+  border-radius: 1px;
+  transform-origin: bottom;
+  animation: eq-bounce 0.9s ease-in-out infinite;
+}
+
+.story-card .eq i:nth-child(1) { height: 45%; animation-delay: 0s; }
+.story-card .eq i:nth-child(2) { height: 100%; animation-delay: 0.2s; }
+.story-card .eq i:nth-child(3) { height: 65%; animation-delay: 0.4s; }
+
+.story-card.paused .eq i { animation-play-state: paused; }
+
+@keyframes eq-bounce {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+/* ============================================
+   Spinner de carga en el botón de reproducir
+   ============================================ */
+.btn-play-main.loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn-play-main.loading::after {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--gold-dim);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
