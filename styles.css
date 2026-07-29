@@ -137,11 +137,11 @@
   display: inline-block;
   margin-top: 1.75rem;
   font-family: 'Inter', sans-serif;
-  color: var(--text-dim);
-  font-size: 0.7rem;
+  color: var(--text);
+  font-size: 0.72rem;
   letter-spacing: 1px;
   text-decoration: none;
-  opacity: 0.55;
+  opacity: 0.8;
   transition: opacity 0.3s, color 0.3s;
 }
 
