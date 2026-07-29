@@ -102,6 +102,54 @@
   opacity: 0.4;
 }
 
+/* Acciones del header (sonido + social) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Enlace social (TikTok) */
+.btn-social {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.btn-social:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* Enlace de TikTok en el splash */
+.splash-tiktok {
+  display: inline-block;
+  margin-top: 1.75rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  opacity: 0.55;
+  transition: opacity 0.3s, color 0.3s;
+}
+
+.splash-tiktok:hover {
+  opacity: 1;
+  color: var(--gold);
+}
+
 :root {
   --bg: #08060a;
   --bg-card: #0e0b12;

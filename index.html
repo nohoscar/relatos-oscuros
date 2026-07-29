@@ -25,6 +25,7 @@
       <p class="splash-sub">Donde las sombras tienen voz</p>
       <p class="splash-hint">🎧 Se recomienda usar audífonos</p>
       <button id="btn-enter" class="btn-enter" onclick="enterApp()">Entrar</button>
+      <a class="splash-tiktok" href="https://www.tiktok.com/@relatos_de_la_oscuridad" target="_blank" rel="noopener noreferrer">Síguenos en TikTok · @relatos_de_la_oscuridad</a>
     </div>
   </div>
 
@@ -40,7 +41,12 @@
             <p class="tagline">Donde las sombras tienen voz</p>
           </div>
         </div>
-        <button id="btn-ambient-toggle" class="btn-ambient" onclick="toggleAmbient()" title="Sonido ambiente">🔊</button>
+        <div class="header-actions">
+          <a class="btn-social" href="https://www.tiktok.com/@relatos_de_la_oscuridad" target="_blank" rel="noopener noreferrer" title="Síguenos en TikTok" aria-label="Síguenos en TikTok">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.79a5.67 5.67 0 0 0-.78-.05 5.7 5.7 0 1 0 5.7 5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.29 4.29 0 0 1-3.26-1.48z"/></svg>
+          </a>
+          <button id="btn-ambient-toggle" class="btn-ambient" onclick="toggleAmbient()" title="Sonido ambiente">🔊</button>
+        </div>
       </div>
       <div id="stories-list" class="stories-list"></div>
     </aside>
