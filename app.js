@@ -16,12 +16,38 @@ const VOICE_LABELS = {
 
 let currentStory = null;
 let currentFragmentIndex = 0;
-let audioQueue = [];
+let audioQueue = [];        // URLs de los fragmentos con audio (en orden)
+let preloadedAudio = {};    // index -> elemento Audio precargado
 let isPlaying = false;
 let currentAudio = null;
 let ambientAudio = null;
 let storyAmbientAudio = null;
 const isMobile = () => window.innerWidth <= 768;
+
+// ============================================
+// Progreso de escucha (localStorage)
+// ============================================
+const PROGRESS_KEY = "relatos-progress";
+
+function getProgress() {
+  try {
+    return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function saveProgress(storyId, index) {
+  const p = getProgress();
+  p[storyId] = index;
+  try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch {}
+}
+
+function clearProgress(storyId) {
+  const p = getProgress();
+  delete p[storyId];
+  try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch {}
+}
 
 // ============================================
 // Ambient audio
@@ -163,8 +189,14 @@ function openStory(id) {
   ).join("");
 
   const hasAudio = currentStory.fragments.some(f => f.audioFile);
+  const totalAudio = currentStory.fragments.filter(f => f.audioFile).length;
+  const savedIndex = getProgress()[currentStory.id];
+  const isResuming = typeof savedIndex === "number" && savedIndex > 0 && savedIndex < totalAudio;
+  const listenLabel = isResuming
+    ? `▶ Reanudar (${savedIndex + 1}/${totalAudio})`
+    : "▶ Escuchar Relato";
   const listenBtn = hasAudio
-    ? `<button class="btn-listen" id="btn-listen" onclick="listenStory()">▶ Escuchar Relato</button>`
+    ? `<button class="btn-listen" id="btn-listen" onclick="listenStory()">${listenLabel}</button>`
     : `<div class="no-audio">🎧 Audio próximamente...</div>`;
 
   const fragmentsHTML = currentStory.fragments.map((f, i) => {
@@ -217,58 +249,70 @@ function goBack() {
 // ============================================
 // Audio playback
 // ============================================
-async function listenStory() {
+function listenStory() {
   if (!currentStory) return;
 
   const btn = document.getElementById("btn-listen");
-  btn.disabled = true;
-  btn.textContent = "⏳ Cargando audio...";
 
-  try {
-    audioQueue = [];
-    for (const f of currentStory.fragments) {
-      if (f.audioFile) {
-        const res = await fetch(f.audioFile);
-        if (!res.ok) throw new Error("Audio no encontrado");
-        audioQueue.push(await res.blob());
-      }
-    }
-    if (audioQueue.length === 0) throw new Error("No hay audios");
+  // Lista de URLs de los fragmentos que tienen audio (en orden)
+  audioQueue = currentStory.fragments.map(f => f.audioFile).filter(Boolean);
+  if (audioQueue.length === 0) return;
 
-    btn.textContent = "▶ Reproduciendo...";
-    currentFragmentIndex = 0;
-    showPlayer();
-    playFragment(0);
-  } catch (err) {
-    console.error(err);
-    btn.disabled = false;
-    btn.textContent = "▶ Escuchar Relato";
-  }
+  preloadedAudio = {};
+  showPlayer();
+  setupMediaSession();
+
+  // Reanudar desde donde se quedó, si hay progreso guardado
+  const saved = getProgress()[currentStory.id];
+  const start = (typeof saved === "number" && saved > 0 && saved < audioQueue.length) ? saved : 0;
+
+  btn.textContent = "▶ Reproduciendo...";
+  playFragment(start);
+}
+
+function preloadNext(index) {
+  if (index >= audioQueue.length || preloadedAudio[index]) return;
+  const a = new Audio();
+  a.preload = "auto";
+  a.src = audioQueue[index];
+  preloadedAudio[index] = a;
 }
 
 function playFragment(index) {
-  if (index >= audioQueue.length) { stopPlayback(); return; }
+  if (index >= audioQueue.length) {
+    if (currentStory) clearProgress(currentStory.id); // relato terminado
+    stopPlayback();
+    return;
+  }
 
   currentFragmentIndex = index;
   highlightFragment(index);
   updatePlayerInfo(index);
+  if (currentStory) saveProgress(currentStory.id, index);
 
-  const url = URL.createObjectURL(audioQueue[index]);
-  if (currentAudio) { currentAudio.pause(); URL.revokeObjectURL(currentAudio.src); }
+  if (currentAudio) { currentAudio.pause(); currentAudio.onended = null; }
 
-  currentAudio = new Audio(url);
+  // Usar el audio precargado si está disponible; si no, cargar por URL directa
+  currentAudio = preloadedAudio[index] || new Audio(audioQueue[index]);
+  preloadedAudio = {};
+  currentAudio.currentTime = 0;
+
   isPlaying = true;
   updatePlayButton();
+  updateMediaSession(index);
 
-  currentAudio.addEventListener("timeupdate", () => {
+  currentAudio.ontimeupdate = () => {
     if (currentAudio.duration) {
       const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
       document.getElementById("progress-fill").style.width = pct + "%";
     }
-  });
+  };
 
-  currentAudio.addEventListener("ended", () => playFragment(index + 1));
-  currentAudio.play();
+  currentAudio.onended = () => playFragment(index + 1);
+  currentAudio.play().catch(() => {});
+
+  // Precargar el siguiente fragmento mientras suena el actual
+  preloadNext(index + 1);
 }
 
 function highlightFragment(index) {
@@ -296,12 +340,62 @@ function showPlayer() {
 }
 
 function stopPlayback() {
-  if (currentAudio) { currentAudio.pause(); URL.revokeObjectURL(currentAudio.src); currentAudio = null; }
+  if (currentAudio) { currentAudio.pause(); currentAudio.onended = null; currentAudio = null; }
+  preloadedAudio = {};
   isPlaying = false;
   document.getElementById("player").classList.add("hidden");
   document.querySelectorAll(".fragment").forEach(el => el.classList.remove("active"));
+  if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "none";
   const btn = document.getElementById("btn-listen");
   if (btn) { btn.disabled = false; btn.textContent = "▶ Escuchar Relato"; }
+}
+
+// ============================================
+// MediaSession (controles en pantalla de bloqueo)
+// ============================================
+function setupMediaSession() {
+  if (!("mediaSession" in navigator)) return;
+
+  navigator.mediaSession.setActionHandler("play", () => {
+    if (!currentAudio) return;
+    currentAudio.play().catch(() => {});
+    isPlaying = true;
+    updatePlayButton();
+    navigator.mediaSession.playbackState = "playing";
+  });
+
+  navigator.mediaSession.setActionHandler("pause", () => {
+    if (!currentAudio) return;
+    currentAudio.pause();
+    isPlaying = false;
+    updatePlayButton();
+    navigator.mediaSession.playbackState = "paused";
+  });
+
+  navigator.mediaSession.setActionHandler("previoustrack", () => {
+    if (currentFragmentIndex > 0) playFragment(currentFragmentIndex - 1);
+  });
+
+  navigator.mediaSession.setActionHandler("nexttrack", () => {
+    if (currentFragmentIndex < audioQueue.length - 1) playFragment(currentFragmentIndex + 1);
+  });
+}
+
+function updateMediaSession(index) {
+  if (!("mediaSession" in navigator) || !currentStory) return;
+
+  const frag = currentStory.fragments[index];
+  const artwork = currentStory.cover
+    ? [{ src: new URL(currentStory.cover, location.href).href, sizes: "512x512", type: "image/png" }]
+    : [];
+
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: currentStory.title,
+    artist: `${VOICE_LABELS[frag.voice] || frag.voice} · ${index + 1}/${audioQueue.length}`,
+    album: "Relatos Oscuros",
+    artwork,
+  });
+  navigator.mediaSession.playbackState = "playing";
 }
 
 // ============================================
@@ -310,8 +404,11 @@ function stopPlayback() {
 document.getElementById("btn-play").addEventListener("click", () => {
   if (!currentAudio) return;
   if (isPlaying) { currentAudio.pause(); isPlaying = false; }
-  else { currentAudio.play(); isPlaying = true; }
+  else { currentAudio.play().catch(() => {}); isPlaying = true; }
   updatePlayButton();
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+  }
 });
 
 document.getElementById("btn-prev").addEventListener("click", () => {
