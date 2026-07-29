@@ -2,7 +2,7 @@
 // Relatos Oscuros - Service Worker
 // Sube este número al cambiar el app shell para forzar actualización
 // ============================================
-const VERSION = "v7";
+const VERSION = "v8";
 const SHELL_CACHE = `relatos-shell-${VERSION}`;
 const RUNTIME_CACHE = `relatos-runtime-${VERSION}`;
 
@@ -13,6 +13,7 @@ const APP_SHELL = [
   "styles.css",
   "app.js",
   "manifest.json",
+  "stories.json",
   "images/icon-192.png",
   "images/icon-512.png",
   "images/apple-touch-icon.png",
@@ -36,6 +37,8 @@ self.addEventListener("activate", (event) => {
           .filter((k) => k !== SHELL_CACHE && k !== RUNTIME_CACHE)
           .map((k) => caches.delete(k))
       );
+      // Tomar control de la página de inmediato (offline funciona desde la 1ª visita)
+      await self.clients.claim();
     })()
   );
 });
