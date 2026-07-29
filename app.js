@@ -601,6 +601,7 @@ if (searchInputEl) {
 updateSpeedButton();
 updateVolumeButton();
 volumeSliderEl.value = narrationVolume;
+setOfflineUI("idle");
 
 // ============================================
 // Init
@@ -617,6 +618,60 @@ async function init() {
 }
 
 init();
+
+// ============================================
+// Descarga para escuchar sin conexión
+// ============================================
+let offlineDownloaded = false;
+
+function offlineAssetUrls() {
+  const set = new Set();
+  STORIES.forEach((s) => {
+    (s.fragments || []).forEach((f) => {
+      if (f.audioFile) set.add(f.audioFile);
+      if (f.image) set.add(f.image);
+    });
+    if (s.ambient) set.add(s.ambient);
+    if (s.cover) set.add(s.cover);
+  });
+  return [...set].map((u) => new URL(u, location.href).href);
+}
+
+function setOfflineUI(state, done, total) {
+  const btn = document.getElementById("btn-offline");
+  const status = document.getElementById("offline-status");
+  if (!btn || !status) return;
+  if (state === "downloading") {
+    btn.disabled = true;
+    btn.textContent = "Descargando...";
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    status.textContent = `${done} / ${total} (${pct}%)`;
+  } else if (state === "done") {
+    btn.disabled = false;
+    btn.textContent = "🗑 Borrar descarga";
+    status.textContent = "Disponible sin conexión ✓";
+  } else {
+    btn.disabled = false;
+    btn.textContent = "⬇ Descargar para escuchar sin conexión";
+    status.textContent = "~53 MB · escucha sin internet";
+  }
+}
+
+function toggleOfflineDownload() {
+  const sw = navigator.serviceWorker && navigator.serviceWorker.controller;
+  if (!sw) {
+    alert("Abre la página con internet una vez para activar el modo sin conexión, luego intenta de nuevo.");
+    return;
+  }
+  if (offlineDownloaded) {
+    if (!confirm("¿Borrar las historias descargadas? Liberas espacio, pero necesitarás internet para volver a escucharlas.")) return;
+    sw.postMessage({ type: "CLEAR_OFFLINE" });
+  } else {
+    const urls = offlineAssetUrls();
+    setOfflineUI("downloading", 0, urls.length);
+    sw.postMessage({ type: "DOWNLOAD_ALL", urls });
+  }
+}
 
 // ============================================
 // PWA: registro del service worker + auto-actualización
@@ -663,6 +718,36 @@ if ("serviceWorker" in navigator) {
       if (refreshing) return;
       refreshing = true;
       window.location.reload();
+    });
+
+    // Mensajes del service worker (progreso de descarga offline)
+    navigator.serviceWorker.addEventListener("message", (e) => {
+      const d = e.data || {};
+      if (d.type === "offline-progress") {
+        setOfflineUI("downloading", d.done, d.total);
+      } else if (d.type === "offline-done") {
+        if (d.total && d.failed >= d.total) {
+          offlineDownloaded = false;
+          setOfflineUI("idle");
+          alert("No se pudo descargar. ¿Tienes conexión a internet?");
+        } else {
+          offlineDownloaded = true;
+          setOfflineUI("done");
+        }
+      } else if (d.type === "offline-cleared") {
+        offlineDownloaded = false;
+        setOfflineUI("idle");
+      } else if (d.type === "offline-status") {
+        offlineDownloaded = d.count > 0;
+        setOfflineUI(offlineDownloaded ? "done" : "idle");
+      }
+    });
+
+    // Preguntar si ya hay contenido descargado
+    navigator.serviceWorker.ready.then(() => {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: "CHECK_OFFLINE" });
+      }
     });
   });
 }
