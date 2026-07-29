@@ -694,9 +694,9 @@ body {
 .volume-slider {
   position: absolute;
   bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
+  right: 0;
   width: 120px;
+  max-width: 40vw;
   accent-color: var(--gold);
   background: rgba(20, 16, 26, 0.96);
   border: 1px solid var(--border);
@@ -831,6 +831,8 @@ body {
 
   .btn-ctrl { width: 32px; height: 32px; font-size: 0.75rem; }
   .btn-play-main { width: 40px; height: 40px; font-size: 0.9rem; }
+  .player-controls { gap: 0.35rem; }
+  .btn-speed { min-width: 36px; padding: 0 0.4rem; font-size: 0.68rem; }
 }
 
 @media (max-width: 380px) {
@@ -845,7 +847,7 @@ body {
 .update-toast {
   position: fixed;
   left: 50%;
-  bottom: calc(1rem + var(--safe-bottom, 0px));
+  bottom: calc(5.5rem + var(--safe-bottom, 0px));
   transform: translateX(-50%);
   z-index: 9999;
   display: flex;
