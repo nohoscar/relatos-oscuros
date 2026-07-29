@@ -141,8 +141,6 @@ function renderStories() {
             <div class="story-card-title">${story.title}</div>
             <div class="story-card-meta">
               <span>${story.fragments.length} fragmentos</span>
-              <span>·</span>
-              <span>${story.author}</span>
               ${hasAudio ? '<span class="badge-audio">AUDIO</span>' : ''}
             </div>
           </div>
@@ -217,7 +215,6 @@ function openStory(id) {
     ${coverHTML}
     <div class="reader-header">
       <h2 class="reader-title">${currentStory.title}</h2>
-      <div class="reader-author">${currentStory.author}</div>
       <div class="reader-voices">${voiceTags}</div>
     </div>
     ${listenBtn}
