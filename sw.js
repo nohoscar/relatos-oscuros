@@ -2,7 +2,7 @@
 // Relatos Oscuros - Service Worker
 // Sube este número al cambiar el app shell para forzar actualización
 // ============================================
-const VERSION = "v2";
+const VERSION = "v3";
 const SHELL_CACHE = `relatos-shell-${VERSION}`;
 const RUNTIME_CACHE = `relatos-runtime-${VERSION}`;
 
@@ -47,6 +47,34 @@ self.addEventListener("message", (event) => {
   }
 });
 
+// Red primero: siempre la última versión si hay conexión; caché de respaldo offline
+async function networkFirst(req) {
+  try {
+    const res = await fetch(req);
+    if (res && res.status === 200 && res.type === "basic") {
+      const copy = res.clone();
+      caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
+    }
+    return res;
+  } catch (err) {
+    const cached = await caches.match(req);
+    if (cached) return cached;
+    throw err;
+  }
+}
+
+// Caché primero: para recursos que no cambian (audio, imágenes)
+async function cacheFirst(req) {
+  const cached = await caches.match(req);
+  if (cached) return cached;
+  const res = await fetch(req);
+  if (res && res.status === 200 && res.type === "basic") {
+    const copy = res.clone();
+    caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
+  }
+  return res;
+}
+
 // Estrategias de fetch
 self.addEventListener("fetch", (event) => {
   const req = event.request;
@@ -69,31 +97,9 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // stories.json: red primero (para ver historias nuevas), caché de respaldo
-  if (url.pathname.endsWith("stories.json")) {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
-          return res;
-        })
-        .catch(() => caches.match(req))
-    );
-    return;
-  }
+  const p = url.pathname.toLowerCase();
+  const isMedia = /\.(mp3|png|jpe?g|webp|gif|svg|ico)$/.test(p);
 
-  // Audio, imágenes, css, js: caché primero, y se guarda al vuelo
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).then((res) => {
-        if (res && res.status === 200 && res.type === "basic") {
-          const copy = res.clone();
-          caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
-        }
-        return res;
-      });
-    })
-  );
+  // Audio e imágenes: caché primero (no cambian). Resto (js, css, json): red primero.
+  event.respondWith(isMedia ? cacheFirst(req) : networkFirst(req));
 });

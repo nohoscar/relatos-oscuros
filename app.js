@@ -562,6 +562,10 @@ function showUpdateToast(registration) {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").then((reg) => {
+      // Si ya hay una versión esperando de una visita anterior, avisar de una vez
+      if (reg.waiting && navigator.serviceWorker.controller) {
+        showUpdateToast(reg);
+      }
       reg.addEventListener("updatefound", () => {
         const newWorker = reg.installing;
         if (!newWorker) return;
@@ -572,6 +576,8 @@ if ("serviceWorker" in navigator) {
           }
         });
       });
+      // Forzar chequeo de actualización al cargar
+      reg.update();
     }).catch(() => {});
 
     // Cuando el nuevo SW toma control, recargar una vez para aplicar la actualización
