@@ -483,3 +483,46 @@ async function init() {
 }
 
 init();
+
+// ============================================
+// PWA: registro del service worker + auto-actualización
+// ============================================
+function showUpdateToast(registration) {
+  if (document.getElementById("update-toast")) return;
+  const toast = document.createElement("div");
+  toast.id = "update-toast";
+  toast.className = "update-toast";
+  toast.innerHTML = `<span>🔄 Nueva versión disponible</span><button type="button">Actualizar</button>`;
+  toast.querySelector("button").addEventListener("click", () => {
+    if (registration.waiting) {
+      registration.waiting.postMessage({ type: "SKIP_WAITING" });
+    }
+    toast.remove();
+  });
+  document.body.appendChild(toast);
+}
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").then((reg) => {
+      reg.addEventListener("updatefound", () => {
+        const newWorker = reg.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener("statechange", () => {
+          // Hay una versión nueva lista y ya existía una controlando: avisar
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            showUpdateToast(reg);
+          }
+        });
+      });
+    }).catch(() => {});
+
+    // Cuando el nuevo SW toma control, recargar una vez para aplicar la actualización
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  });
+}
