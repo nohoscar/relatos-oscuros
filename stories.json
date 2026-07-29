@@ -1116,5 +1116,83 @@
       }
     ],
     "ambient": "audio/ambient-story9.mp3"
+  },
+  {
+    "id": 10,
+    "title": "La Última Grabación",
+    "author": "Relatos Oscuros",
+    "fragments": [
+      {
+        "voice": "narrador",
+        "text": "Mateo trabajaba de noche masterizando audio para quien pagara. A las tres de la mañana, cuando la ciudad callaba, llegó a su correo un archivo sin remitente. Un solo mensaje: límpialo, quita la voz de fondo. Adjunto, una grabación de cuatro minutos.",
+        "audioFile": "audio/ultima-01.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Cuatro minutos de estática... ni música ni nada. Qué manía de mandar basura a estas horas. A ver, me pongo los audífonos y le echo un ojo a la onda.",
+        "audioFile": "audio/ultima-02.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Los primeros tres minutos eran ruido blanco, un mar de estática gris. Pero en el minuto tres con treinta y tres, entre el zumbido, había algo. Una voz. Muy baja. Mateo subió el volumen y aisló la frecuencia.",
+        "audioFile": "audio/ultima-03.mp3"
+      },
+      {
+        "voice": "entidad",
+        "text": "Ma... te... o. Sí me escuchas. Por fin alguien me escucha.",
+        "audioFile": "audio/ultima-04.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "¿Cómo sabe mi nombre este audio? No. Es pareidolia auditiva, el cerebro arma palabras donde solo hay ruido. Lo he visto mil veces. Voy a limpiar esa banda y se acabó.",
+        "audioFile": "audio/ultima-05.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Pero al eliminar la estática, no quedó silencio. Debajo del ruido había más sonidos, nítidos, enterrados. El crujido de una silla. El tic de un reloj. Y una respiración lenta que no era la suya. Mateo miró el reloj de su pared. Hacía el mismo tic. Exacto.",
+        "audioFile": "audio/ultima-06.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Esto... esto es mi cuarto. Ese es mi reloj. ¿Cómo hay sonidos de mi cuarto en un archivo que me acaban de mandar?",
+        "audioFile": "audio/ultima-07.mp3"
+      },
+      {
+        "voice": "entidad",
+        "text": "No apagues. Casi termino. Solo falta grabar el final. Tu final.",
+        "audioFile": "audio/ultima-08.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Intentó cerrar el programa. El cursor no respondía. La barra de reproducción seguía avanzando sola, y la forma de onda crecía en tiempo real, alimentándose de cada ruido de la habitación. Cada vez que Mateo se movía, la pantalla lo dibujaba medio segundo después.",
+        "audioFile": "audio/ultima-09.mp3"
+      },
+      {
+        "voice": "hombre",
+        "text": "Ok, ok. Desenchufo los audífonos y ya. Se acabó el jueguito.",
+        "audioFile": "audio/ultima-10.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Se los arrancó de las orejas. Pero la voz no se fue. Ahora salía de las bocinas, del teléfono, del cuarto entero. Y en la pantalla, la grabación mostraba un nuevo canal apareciendo debajo del suyo: el sonido de unos pasos acercándose por detrás de su silla.",
+        "audioFile": "audio/ultima-11.mp3"
+      },
+      {
+        "voice": "entidad",
+        "text": "Date la vuelta, Mateo. Quiero que la última pista tenga tu voz bien clara.",
+        "audioFile": "audio/ultima-12.mp3"
+      },
+      {
+        "voice": "narrador",
+        "text": "Al amanecer, la computadora seguía encendida. El archivo se había guardado solo, ahora duraba cuatro minutos con un segundo. En ese segundo extra había un grito. El de Mateo. Y la silla estaba vacía. Esa misma mañana, la grabación salió disparada a un correo nuevo, con un mensaje: límpialo, quita la voz de fondo.",
+        "audioFile": "audio/ultima-13.mp3"
+      },
+      {
+        "voice": "entidad",
+        "text": "Gracias por escuchar hasta el final. Ahora te toca a ti. No te quites los audífonos todavía... casi termino.",
+        "audioFile": "audio/ultima-14.mp3"
+      }
+    ],
+    "ambient": "audio/ambient-story10.mp3"
   }
 ]
