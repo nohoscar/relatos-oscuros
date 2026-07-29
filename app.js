@@ -104,12 +104,16 @@ function enterApp() {
   setTimeout(() => splash.remove(), 800);
 }
 
+// Volumen normal del ambiente y volumen "agachado" cuando habla la narración
+const AMBIENT_STORY_VOLUME = 0.15;
+const AMBIENT_STORY_DUCKED = 0.05;
+
 function startStoryAmbient(url) {
   stopStoryAmbient();
   if (!url) return;
   storyAmbientAudio = new Audio(url);
   storyAmbientAudio.loop = true;
-  storyAmbientAudio.volume = 0.15;
+  storyAmbientAudio.volume = AMBIENT_STORY_VOLUME;
   storyAmbientAudio.play().catch(() => {});
 }
 
@@ -119,6 +123,25 @@ function stopStoryAmbient() {
   storyAmbientAudio.currentTime = 0;
   storyAmbientAudio = null;
 }
+
+// Transición suave de volumen del ambiente (ducking)
+function rampAmbient(target, ms = 450) {
+  if (!storyAmbientAudio) return;
+  const audio = storyAmbientAudio;
+  const startVol = audio.volume;
+  const startTime = performance.now();
+  function step(now) {
+    // Cancelar si el ambiente cambió de historia o se detuvo
+    if (storyAmbientAudio !== audio) return;
+    const t = Math.min((now - startTime) / ms, 1);
+    audio.volume = startVol + (target - startVol) * t;
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function duckAmbient() { rampAmbient(AMBIENT_STORY_DUCKED); }
+function unduckAmbient() { rampAmbient(AMBIENT_STORY_VOLUME); }
 
 // ============================================
 // Render sidebar story list
@@ -307,6 +330,7 @@ function playFragment(index) {
 
   currentAudio.onended = () => playFragment(index + 1);
   currentAudio.play().catch(() => {});
+  duckAmbient(); // el ambiente se agacha mientras habla la narración
 
   // Precargar el siguiente fragmento mientras suena el actual
   preloadNext(index + 1);
@@ -339,6 +363,7 @@ function showPlayer() {
 function stopPlayback() {
   if (currentAudio) { currentAudio.pause(); currentAudio.onended = null; currentAudio = null; }
   preloadedAudio = {};
+  unduckAmbient(); // el ambiente vuelve a su volumen normal
   isPlaying = false;
   document.getElementById("player").classList.add("hidden");
   document.querySelectorAll(".fragment").forEach(el => el.classList.remove("active"));
@@ -357,6 +382,7 @@ function setupMediaSession() {
     if (!currentAudio) return;
     currentAudio.play().catch(() => {});
     isPlaying = true;
+    duckAmbient();
     updatePlayButton();
     navigator.mediaSession.playbackState = "playing";
   });
@@ -365,6 +391,7 @@ function setupMediaSession() {
     if (!currentAudio) return;
     currentAudio.pause();
     isPlaying = false;
+    unduckAmbient();
     updatePlayButton();
     navigator.mediaSession.playbackState = "paused";
   });
@@ -400,13 +427,38 @@ function updateMediaSession(index) {
 // ============================================
 document.getElementById("btn-play").addEventListener("click", () => {
   if (!currentAudio) return;
-  if (isPlaying) { currentAudio.pause(); isPlaying = false; }
-  else { currentAudio.play().catch(() => {}); isPlaying = true; }
+  if (isPlaying) { currentAudio.pause(); isPlaying = false; unduckAmbient(); }
+  else { currentAudio.play().catch(() => {}); isPlaying = true; duckAmbient(); }
   updatePlayButton();
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
   }
 });
+
+// Barra de progreso: clic (o arrastre) para saltar dentro del fragmento
+const progressBarEl = document.getElementById("progress-bar");
+
+function seekFromEvent(clientX) {
+  if (!currentAudio || !currentAudio.duration) return;
+  const rect = progressBarEl.getBoundingClientRect();
+  const ratio = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+  currentAudio.currentTime = ratio * currentAudio.duration;
+  document.getElementById("progress-fill").style.width = (ratio * 100) + "%";
+}
+
+progressBarEl.addEventListener("click", (e) => seekFromEvent(e.clientX));
+
+// Arrastre para hacer scrubbing
+let isScrubbing = false;
+progressBarEl.addEventListener("pointerdown", (e) => {
+  isScrubbing = true;
+  progressBarEl.setPointerCapture(e.pointerId);
+  seekFromEvent(e.clientX);
+});
+progressBarEl.addEventListener("pointermove", (e) => {
+  if (isScrubbing) seekFromEvent(e.clientX);
+});
+progressBarEl.addEventListener("pointerup", () => { isScrubbing = false; });
 
 document.getElementById("btn-prev").addEventListener("click", () => {
   if (currentFragmentIndex > 0) playFragment(currentFragmentIndex - 1);
