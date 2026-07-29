@@ -2,11 +2,9 @@
 // Relatos Oscuros - Service Worker
 // Sube este número al cambiar el app shell para forzar actualización
 // ============================================
-const VERSION = "v9";
+const VERSION = "v8";
 const SHELL_CACHE = `relatos-shell-${VERSION}`;
 const RUNTIME_CACHE = `relatos-runtime-${VERSION}`;
-// Caché de descarga manual (sin versión: sobrevive a las actualizaciones)
-const OFFLINE_CACHE = "relatos-offline";
 
 // Archivos base de la app (se precachean al instalar)
 const APP_SHELL = [
@@ -36,59 +34,20 @@ self.addEventListener("activate", (event) => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter((k) => k !== SHELL_CACHE && k !== RUNTIME_CACHE && k !== OFFLINE_CACHE)
+          .filter((k) => k !== SHELL_CACHE && k !== RUNTIME_CACHE)
           .map((k) => caches.delete(k))
       );
-      // Tomar control de la página de inmediato (offline funciona desde la 1a visita)
+      // Tomar control de la página de inmediato (offline funciona desde la 1ª visita)
       await self.clients.claim();
     })()
   );
 });
 
-// Descargar todos los recursos para uso sin conexión
-async function downloadAll(urls, client) {
-  const cache = await caches.open(OFFLINE_CACHE);
-  const total = urls.length;
-  let done = 0;
-  let failed = 0;
-  for (const url of urls) {
-    try {
-      const existing = await cache.match(url);
-      if (!existing) {
-        const res = await fetch(url, { cache: "no-store" });
-        if (res && res.status === 200) await cache.put(url, res.clone());
-        else failed++;
-      }
-    } catch (e) {
-      failed++;
-    }
-    done++;
-    if (client) client.postMessage({ type: "offline-progress", done, total });
-  }
-  if (client) client.postMessage({ type: "offline-done", total, failed });
-}
-
-async function clearOffline(client) {
-  await caches.delete(OFFLINE_CACHE);
-  if (client) client.postMessage({ type: "offline-cleared" });
-}
-
-async function checkOffline(client) {
-  let count = 0;
-  if (await caches.has(OFFLINE_CACHE)) {
-    const c = await caches.open(OFFLINE_CACHE);
-    count = (await c.keys()).length;
-  }
-  if (client) client.postMessage({ type: "offline-status", count });
-}
-
-// Mensajes desde la página
+// Permitir que la página fuerce la actualización
 self.addEventListener("message", (event) => {
-  const data = event.data || {};
-  if (data.type === "SKIP_WAITING") { self.skipWaiting(); return; }
-  if (data.type === "DOWNLOAD_ALL") { event.waitUntil(downloadAll(data.urls || [], event.source)); return; }
-  if (data.type === "CLEAR_OFFLINE") { event.waitUntil(clearOffline(event.source)); return; }
-  if (data.type === "CHECK_OFFLINE") { event.waitUntil(checkOffline(event.source)); return; }
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
 // Red primero: siempre la última versión si hay conexión; caché de respaldo offline
@@ -107,22 +66,16 @@ async function networkFirst(req) {
   }
 }
 
-// Caché primero: para recursos que no cambian (audio, imágenes).
-// Sirve la copia guardada aunque la petición traiga Range (así reproduce offline).
+// Caché primero: para recursos que no cambian (audio, imágenes)
 async function cacheFirst(req) {
-  const cached = await caches.match(req, { ignoreVary: true });
+  const cached = await caches.match(req);
   if (cached) return cached;
-  try {
-    const res = await fetch(req);
-    if (res && res.status === 200 && res.type === "basic") {
-      const copy = res.clone();
-      caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
-    }
-    return res;
-  } catch (err) {
-    // Offline y no está en caché
-    return new Response("", { status: 504, statusText: "Sin conexión" });
+  const res = await fetch(req);
+  if (res && res.status === 200 && res.type === "basic") {
+    const copy = res.clone();
+    caches.open(RUNTIME_CACHE).then((c) => c.put(req, copy));
   }
+  return res;
 }
 
 // Estrategias de fetch
@@ -133,8 +86,11 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return; // solo mismo origen
 
-  const p = url.pathname.toLowerCase();
-  const isMedia = /\.(mp3|png|jpe?g|webp|gif|svg|ico)$/.test(p);
+  // Peticiones con Range (audio al buscar): ir directo a la red, sin cachear
+  if (req.headers.has("range")) {
+    event.respondWith(fetch(req));
+    return;
+  }
 
   // Navegación: red primero, con index.html como respaldo offline
   if (req.mode === "navigate") {
@@ -143,6 +99,9 @@ self.addEventListener("fetch", (event) => {
     );
     return;
   }
+
+  const p = url.pathname.toLowerCase();
+  const isMedia = /\.(mp3|png|jpe?g|webp|gif|svg|ico)$/.test(p);
 
   // Audio e imágenes: caché primero (no cambian). Resto (js, css, json): red primero.
   event.respondWith(isMedia ? cacheFirst(req) : networkFirst(req));
