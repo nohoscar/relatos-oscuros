@@ -8,6 +8,18 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Historias de terror narradas con voces del más allá">
   <title>Relatos Oscuros</title>
+  <!-- Vista previa al compartir (WhatsApp, TikTok, Facebook, X) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Relatos Oscuros">
+  <meta property="og:title" content="Relatos Oscuros · Historias de terror narradas">
+  <meta property="og:description" content="Historias de terror narradas con voces del más allá. Se recomienda usar audífonos.">
+  <meta property="og:url" content="https://relatos-oscuros.sbkoscar.workers.dev/">
+  <meta property="og:image" content="https://relatos-oscuros.sbkoscar.workers.dev/images/icon-512.png">
+  <meta property="og:locale" content="es_MX">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Relatos Oscuros · Historias de terror narradas">
+  <meta name="twitter:description" content="Historias de terror narradas con voces del más allá. Se recomienda usar audífonos.">
+  <meta name="twitter:image" content="https://relatos-oscuros.sbkoscar.workers.dev/images/icon-512.png">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="images/icon-192.png">
@@ -45,7 +57,7 @@
           <a class="btn-social" href="https://www.tiktok.com/@relatos_de_la_oscuridad" target="_blank" rel="noopener noreferrer" title="Síguenos en TikTok" aria-label="Síguenos en TikTok">
             <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.79a5.67 5.67 0 0 0-.78-.05 5.7 5.7 0 1 0 5.7 5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.29 4.29 0 0 1-3.26-1.48z"/></svg>
           </a>
-          <button id="btn-ambient-toggle" class="btn-ambient" onclick="toggleAmbient()" title="Sonido ambiente">🔊</button>
+          <button id="btn-ambient-toggle" class="btn-ambient" onclick="toggleAmbient()" title="Sonido ambiente" aria-label="Sonido ambiente">🔊</button>
         </div>
       </div>
       <div class="search-box">
@@ -76,13 +88,14 @@
           <span id="player-fragment" class="player-fragment"></span>
         </div>
         <div class="player-controls">
-          <button id="btn-speed" class="btn-ctrl btn-speed" title="Velocidad">1x</button>
-          <button id="btn-prev" class="btn-ctrl" title="Anterior">⏮</button>
-          <button id="btn-play" class="btn-ctrl btn-play-main" title="Reproducir">▶</button>
-          <button id="btn-next" class="btn-ctrl" title="Siguiente">⏭</button>
+          <button id="btn-sleep" class="btn-ctrl btn-sleep" title="Temporizador para dormir" aria-label="Temporizador para dormir">🌙</button>
+          <button id="btn-speed" class="btn-ctrl btn-speed" title="Velocidad" aria-label="Velocidad de narración">1x</button>
+          <button id="btn-prev" class="btn-ctrl" title="Anterior" aria-label="Fragmento anterior">⏮</button>
+          <button id="btn-play" class="btn-ctrl btn-play-main" title="Reproducir" aria-label="Reproducir o pausar">▶</button>
+          <button id="btn-next" class="btn-ctrl" title="Siguiente" aria-label="Fragmento siguiente">⏭</button>
           <div class="volume-control">
-            <button id="btn-volume" class="btn-ctrl" title="Volumen">🔊</button>
-            <input id="volume-slider" class="volume-slider" type="range" min="0" max="1" step="0.05" value="1" title="Volumen de la narración" />
+            <button id="btn-volume" class="btn-ctrl" title="Volumen" aria-label="Volumen">🔊</button>
+            <input id="volume-slider" class="volume-slider" type="range" min="0" max="1" step="0.05" value="1" title="Volumen de la narración" aria-label="Volumen de la narración" />
           </div>
         </div>
       </div>

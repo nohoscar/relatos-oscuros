@@ -165,6 +165,13 @@ function unduckAmbient() { rampAmbient(AMBIENT_STORY_VOLUME); }
 // ============================================
 // Render sidebar story list
 // ============================================
+// Escapa texto antes de meterlo en innerHTML
+function escapeHTML(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
 // Normaliza texto (sin acentos, minúsculas) para búsqueda
 function norm(s) {
   return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -182,7 +189,7 @@ function renderStories() {
   const list = q ? STORIES.filter(s => norm(s.title).includes(q)) : STORIES;
 
   if (list.length === 0) {
-    container.innerHTML = `<div class="list-empty">No encontré relatos con "${searchQuery.trim()}"</div>`;
+    container.innerHTML = `<div class="list-empty">No encontré relatos con "${escapeHTML(searchQuery.trim())}"</div>`;
     return;
   }
 
@@ -200,7 +207,7 @@ function renderStories() {
       : `<div class="story-card-cover no-cover">🕯️</div>`;
 
     return `
-      <div class="story-card ${isActive ? 'active' : ''}" data-story-id="${story.id}" onclick="openStory(${story.id})">
+      <div class="story-card ${isActive ? 'active' : ''}" data-story-id="${story.id}" role="button" tabindex="0" aria-label="Abrir ${escapeHTML(story.title)}" onclick="openStory(${story.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openStory(${story.id})}">
         <div class="story-card-inner">
           ${coverHTML}
           <div class="story-card-info">
@@ -287,8 +294,12 @@ function openStory(id) {
     const imgHTML = f.image
       ? `<div class="fragment-image"><img src="${f.image}" alt="" loading="lazy" /></div>`
       : '';
+    const audioIdx = currentStory.fragments.slice(0, i + 1).filter(x => x.audioFile).length - 1;
+    const jump = f.audioFile
+      ? ` role="button" tabindex="0" title="Escuchar desde aquí" onclick="jumpToFragment(${audioIdx})" onkeydown="if(event.key==='Enter'){jumpToFragment(${audioIdx})}"`
+      : "";
     return `
-      <div class="fragment" id="fragment-${i}">
+      <div class="fragment ${f.audioFile ? 'can-jump' : ''}" id="fragment-${i}"${jump}>
         ${imgHTML}
         <div class="fragment-voice ${f.voice}">${VOICE_LABELS[f.voice] || f.voice}</div>
         <div class="fragment-text">${f.text}</div>
@@ -342,6 +353,7 @@ function listenStory() {
   if (audioQueue.length === 0) return;
 
   preloadedAudio = {};
+  retryCount = 0;
   showPlayer();
   setupMediaSession();
 
@@ -353,12 +365,42 @@ function listenStory() {
   playFragment(start);
 }
 
+// Tocar un fragmento: escuchar desde ahí
+function jumpToFragment(audioIndex) {
+  if (!currentStory) return;
+  if (playingStoryId !== currentStory.id) {
+    audioQueue = currentStory.fragments.map(f => f.audioFile).filter(Boolean);
+    if (audioQueue.length === 0) return;
+    preloadedAudio = {};
+    retryCount = 0;
+    showPlayer();
+    setupMediaSession();
+    const btn = document.getElementById("btn-listen");
+    if (btn) btn.textContent = "▶ Reproduciendo...";
+  }
+  playFragment(Math.min(Math.max(audioIndex, 0), audioQueue.length - 1));
+}
+
+// Un solo elemento de audio para toda la narración.
+// En iPhone, crear un Audio nuevo por fragmento hace que la narración se corte
+// con la pantalla bloqueada; reusar el mismo elemento la mantiene sonando.
+const narration = new Audio();
+narration.preload = "auto";
+// Elemento aparte solo para calentar la caché del siguiente fragmento
+const preloader = new Audio();
+preloader.preload = "auto";
+preloader.muted = true;
+
+let retryCount = 0;
+let retryTimer = null;
+
 function preloadNext(index) {
-  if (index >= audioQueue.length || preloadedAudio[index]) return;
-  const a = new Audio();
-  a.preload = "auto";
-  a.src = audioQueue[index];
-  preloadedAudio[index] = a;
+  if (index >= audioQueue.length) return;
+  const url = new URL(audioQueue[index], location.href).href;
+  if (preloader.src !== url) {
+    preloader.src = url;
+    preloader.load();
+  }
 }
 
 function playFragment(index) {
@@ -368,19 +410,21 @@ function playFragment(index) {
     return;
   }
 
+  clearTimeout(retryTimer);
+  hideAudioError();
+  if (index !== currentFragmentIndex) retryCount = 0;
+
   currentFragmentIndex = index;
   highlightFragment(index);
   updatePlayerInfo(index);
   if (currentStory) saveProgress(currentStory.id, index);
 
-  if (currentAudio) { currentAudio.pause(); currentAudio.onended = null; }
-
-  // Usar el audio precargado si está disponible; si no, cargar por URL directa
-  currentAudio = preloadedAudio[index] || new Audio(audioQueue[index]);
-  preloadedAudio = {};
-  currentAudio.currentTime = 0;
-  currentAudio.playbackRate = playbackRate;
-  currentAudio.volume = narrationVolume;
+  currentAudio = narration;
+  narration.pause();
+  narration.src = audioQueue[index];
+  narration.playbackRate = playbackRate;
+  narration.defaultPlaybackRate = playbackRate;
+  narration.volume = narrationVolume;
 
   isPlaying = true;
   playingStoryId = currentStory ? currentStory.id : null;
@@ -389,24 +433,142 @@ function playFragment(index) {
   updateMediaSession(index);
   updatePlayingUI();
 
-  currentAudio.ontimeupdate = () => {
-    if (currentAudio.duration) {
-      const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
+  narration.ontimeupdate = () => {
+    if (narration.duration) {
+      const pct = (narration.currentTime / narration.duration) * 100;
       document.getElementById("progress-fill").style.width = pct + "%";
     }
   };
 
   // Spinner de carga mientras el audio bufferea
-  currentAudio.onplaying = () => { isLoading = false; updatePlayButton(); };
-  currentAudio.oncanplay = () => { isLoading = false; updatePlayButton(); };
-  currentAudio.onwaiting = () => { isLoading = true; updatePlayButton(); };
+  narration.onplaying = () => { isLoading = false; retryCount = 0; updatePlayButton(); };
+  narration.oncanplay = () => { isLoading = false; updatePlayButton(); };
+  narration.onwaiting = () => { isLoading = true; updatePlayButton(); };
+  narration.onerror = () => onNarrationError(index);
 
-  currentAudio.onended = () => playFragment(index + 1);
-  currentAudio.play().catch(() => {});
+  narration.onended = () => {
+    if (sleepAtEnd) { sleepAtEnd = false; clearSleepTimer(); pauseNarration(); return; }
+    playFragment(index + 1);
+  };
+  narration.play().catch((err) => {
+    // El navegador bloqueó el autoplay: dejar listo para que el usuario toque ▶
+    if (err && err.name === "NotAllowedError") {
+      isPlaying = false; isLoading = false;
+      updatePlayButton(); updatePlayingUI();
+    }
+  });
   duckAmbient(); // el ambiente se agacha mientras habla la narración
 
   // Precargar el siguiente fragmento mientras suena el actual
   preloadNext(index + 1);
+}
+
+// Si un audio falla (red cortada, archivo dañado): reintentar una vez y luego avisar
+function onNarrationError(index) {
+  if (index !== currentFragmentIndex || !playingStoryId) return;
+  if (retryCount < 1) {
+    retryCount++;
+    isLoading = true; updatePlayButton();
+    retryTimer = setTimeout(() => playFragment(index), 1500);
+    return;
+  }
+  isPlaying = false; isLoading = false;
+  updatePlayButton(); updatePlayingUI(); unduckAmbient();
+  showAudioError(index);
+}
+
+function showAudioError(index) {
+  hideAudioError();
+  const toast = document.createElement("div");
+  toast.id = "audio-error-toast";
+  toast.className = "update-toast audio-error-toast";
+  toast.setAttribute("role", "alert");
+  toast.innerHTML = `<span>⚠️ No se pudo cargar el audio. Revisa tu conexión.</span><button type="button">Reintentar</button>`;
+  toast.querySelector("button").addEventListener("click", () => {
+    retryCount = 0;
+    playFragment(index);
+  });
+  document.body.appendChild(toast);
+}
+
+function hideAudioError() {
+  const t = document.getElementById("audio-error-toast");
+  if (t) t.remove();
+}
+
+function pauseNarration() {
+  if (!currentAudio) return;
+  currentAudio.pause();
+  isPlaying = false;
+  unduckAmbient();
+  updatePlayButton();
+  updatePlayingUI();
+  if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused";
+}
+
+function resumeNarration() {
+  if (!currentAudio) return;
+  currentAudio.play().catch(() => {});
+  isPlaying = true;
+  duckAmbient();
+  updatePlayButton();
+  updatePlayingUI();
+  if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing";
+}
+
+// ============================================
+// Temporizador para dormir
+// ============================================
+// Ciclo: apagado → 15 → 30 → 60 min → al terminar el fragmento → apagado
+const SLEEP_STEPS = [0, 15, 30, 60, "fin"];
+let sleepStep = 0;
+let sleepTimer = null;
+let sleepAtEnd = false;
+
+function clearSleepTimer() {
+  clearTimeout(sleepTimer);
+  sleepTimer = null;
+  sleepAtEnd = false;
+  sleepStep = 0;
+  updateSleepButton();
+}
+
+function updateSleepButton() {
+  const btn = document.getElementById("btn-sleep");
+  if (!btn) return;
+  const v = SLEEP_STEPS[sleepStep];
+  btn.textContent = v === 0 ? "🌙" : v === "fin" ? "🌙⏹" : `🌙${v}`;
+  btn.classList.toggle("on", v !== 0);
+  btn.title = v === 0 ? "Temporizador para dormir"
+    : v === "fin" ? "Se detiene al terminar este fragmento"
+    : `Se detiene en ${v} min`;
+}
+
+// Bajar el volumen poco a poco antes de pausar, para no despertar de golpe
+function fadeOutAndPause() {
+  if (!currentAudio) { clearSleepTimer(); return; }
+  const a = currentAudio;
+  const start = a.volume;
+  const t0 = performance.now();
+  function step(now) {
+    const k = Math.min((now - t0) / 8000, 1);
+    a.volume = start * (1 - k);
+    if (k < 1) requestAnimationFrame(step);
+    else { pauseNarration(); a.volume = narrationVolume; clearSleepTimer(); }
+  }
+  requestAnimationFrame(step);
+}
+
+function cycleSleepTimer() {
+  clearTimeout(sleepTimer);
+  sleepTimer = null;
+  sleepStep = (sleepStep + 1) % SLEEP_STEPS.length;
+  const v = SLEEP_STEPS[sleepStep];
+  sleepAtEnd = v === "fin";
+  if (typeof v === "number" && v > 0) {
+    sleepTimer = setTimeout(fadeOutAndPause, v * 60 * 1000);
+  }
+  updateSleepButton();
 }
 
 function highlightFragment(index) {
@@ -436,7 +598,15 @@ function showPlayer() {
 }
 
 function stopPlayback() {
-  if (currentAudio) { currentAudio.pause(); currentAudio.onended = null; currentAudio = null; }
+  clearTimeout(retryTimer);
+  hideAudioError();
+  clearSleepTimer();
+  narration.onended = null;
+  narration.onerror = null;
+  narration.pause();
+  narration.removeAttribute("src");
+  narration.load();
+  currentAudio = null;
   preloadedAudio = {};
   unduckAmbient(); // el ambiente vuelve a su volumen normal
   isPlaying = false;
@@ -456,25 +626,8 @@ function stopPlayback() {
 function setupMediaSession() {
   if (!("mediaSession" in navigator)) return;
 
-  navigator.mediaSession.setActionHandler("play", () => {
-    if (!currentAudio) return;
-    currentAudio.play().catch(() => {});
-    isPlaying = true;
-    duckAmbient();
-    updatePlayButton();
-    updatePlayingUI();
-    navigator.mediaSession.playbackState = "playing";
-  });
-
-  navigator.mediaSession.setActionHandler("pause", () => {
-    if (!currentAudio) return;
-    currentAudio.pause();
-    isPlaying = false;
-    unduckAmbient();
-    updatePlayButton();
-    updatePlayingUI();
-    navigator.mediaSession.playbackState = "paused";
-  });
+  navigator.mediaSession.setActionHandler("play", () => resumeNarration());
+  navigator.mediaSession.setActionHandler("pause", () => pauseNarration());
 
   navigator.mediaSession.setActionHandler("previoustrack", () => {
     if (currentFragmentIndex > 0) playFragment(currentFragmentIndex - 1);
@@ -507,14 +660,12 @@ function updateMediaSession(index) {
 // ============================================
 document.getElementById("btn-play").addEventListener("click", () => {
   if (!currentAudio) return;
-  if (isPlaying) { currentAudio.pause(); isPlaying = false; unduckAmbient(); }
-  else { currentAudio.play().catch(() => {}); isPlaying = true; duckAmbient(); }
-  updatePlayButton();
-  updatePlayingUI();
-  if ("mediaSession" in navigator) {
-    navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
-  }
+  if (isPlaying) pauseNarration();
+  else resumeNarration();
 });
+
+const btnSleepEl = document.getElementById("btn-sleep");
+if (btnSleepEl) btnSleepEl.addEventListener("click", cycleSleepTimer);
 
 // Barra de progreso: clic (o arrastre) para saltar dentro del fragmento
 const progressBarEl = document.getElementById("progress-bar");
