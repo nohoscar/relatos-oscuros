@@ -2,7 +2,7 @@
 // Relatos Oscuros - Service Worker
 // Sube este número al cambiar el app shell para forzar actualización
 // ============================================
-const VERSION = "v8";
+const VERSION = "v9";
 const SHELL_CACHE = `relatos-shell-${VERSION}`;
 const RUNTIME_CACHE = `relatos-runtime-${VERSION}`;
 
